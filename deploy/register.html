@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>注册 · 像素豆 PixelBean</title>
+  <meta name="description" content="像素豆账号登录与注册，保存你的作品与模板。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="登录 / 注册 · 像素豆 PixelBean">
+  <meta property="og:description" content="像素豆账号登录与注册，保存你的作品与模板。">
+  <meta property="og:url" content="https://pixelbean.example.com/register.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="登录 / 注册 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="像素豆账号登录与注册，保存你的作品与模板。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/register.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6F1E7; --orange:#F2643E; --orange-soft:rgba(242,100,62,.3);
+  --green:#1FA89A; --yellow:#F4C041; --ink:#241E18; --gray:#6E655A;
+  --lightgray:#9F968F; --border:#E8E0D2; --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Noto Sans SC','Outfit',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--cream); color:var(--ink); min-height:100vh;
+}
+.reg-wrap{display:flex; min-height:100vh;}
+/* 左侧品牌区 */
+.reg-aside{
+  flex:0 0 42%; background:linear-gradient(160deg,#F2643E 0%,#E5484D 100%);
+  color:#fff; padding:56px 56px; display:flex; flex-direction:column; justify-content:space-between;
+  position:relative; overflow:hidden;
+}
+.reg-aside .brand{display:flex; align-items:center; gap:12px;}
+.reg-aside .brand img{width:40px;height:40px;}
+.reg-aside .brand b{font-size:22px;font-weight:700;}
+.reg-aside .brand span{font-size:12px;font-weight:600;opacity:.85;display:block;margin-top:4px;}
+.reg-hero{margin-top:48px;}
+.reg-hero h1{font-size:40px;font-weight:700;line-height:1.3;}
+.reg-hero p{margin-top:18px;font-size:16px;line-height:1.7;opacity:.92;max-width:380px;}
+.reg-points{margin-top:36px;display:flex;flex-direction:column;gap:14px;}
+.reg-point{display:flex;align-items:center;gap:12px;font-size:15px;opacity:.95;}
+.reg-point .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);flex:none;}
+.reg-foot{font-size:13px;opacity:.8;}
+.reg-beads{position:absolute;right:-40px;bottom:-30px;display:grid;grid-template-columns:repeat(12,18px);gap:4px;opacity:.18;pointer-events:none;}
+.reg-beads i{width:18px;height:18px;border-radius:50%;background:#fff;}
+/* 右侧表单区 */
+.reg-main{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;}
+.reg-card{width:100%;max-width:400px;}
+.reg-back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--gray);text-decoration:none;margin-bottom:28px;cursor:pointer;transition:color .2s;}
+.reg-back:hover{color:var(--orange);}
+.reg-title{font-size:30px;font-weight:700;}
+.reg-sub{font-size:15px;color:var(--gray);margin-top:10px;margin-bottom:32px;}
+/* 注册/登录 切换 */
+.tabs{display:flex;gap:6px;background:var(--cream);border:1px solid var(--border);border-radius:999px;padding:5px;margin-bottom:26px;width:fit-content;}
+.tab{border:none;background:transparent;padding:9px 22px;border-radius:999px;font-size:15px;font-weight:600;color:var(--gray);cursor:pointer;transition:all .18s;font-family:inherit;}
+.tab.on{background:#fff;color:var(--orange);box-shadow:0 2px 8px rgba(33,25,18,.08);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:13px;font-weight:500;color:var(--gray);margin-bottom:8px;}
+.input{
+  width:100%;height:50px;border:1px solid var(--border);border-radius:12px;
+  padding:0 16px;font-size:15px;font-family:inherit;color:var(--ink);background:#fff;
+  transition:border-color .2s, box-shadow .2s;
+}
+.input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px var(--orange-soft);}
+.code-row{display:flex;gap:12px;}
+.code-row .input{flex:1;}
+.captcha-row{display:flex;gap:12px;align-items:stretch;}
+.captcha-row .input{flex:1;}
+.captcha-img{height:50px;border-radius:12px;border:1px solid var(--border);cursor:pointer;background:var(--cream);flex:none;}
+/* 滑块拼图验证码 */
+.slider-cap{display:flex;flex-direction:column;gap:10px;}
+.slider-puzzle{position:relative;width:100%;aspect-ratio:3/2;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:var(--cream);}
+.slider-puzzle svg{display:block;width:100%;height:100%;}
+.slider-refresh{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.85);border:1px solid var(--border);cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;color:var(--gray);}
+.slider-refresh:hover{color:var(--orange);}
+.slider-track{position:relative;height:46px;border-radius:999px;background:var(--cream);border:1px solid var(--border);user-select:none;touch-action:none;}
+.slider-trail{position:absolute;left:0;top:0;height:100%;width:0;border-radius:999px;background:rgba(31,168,154,.18);transition:width .04s linear;}
+.slider-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:var(--lightgray);pointer-events:none;}
+.slider-handle{position:absolute;top:50%;left:0;width:42px;height:42px;transform:translate(-50%,-50%);border-radius:50%;background:#fff;border:1px solid var(--border);box-shadow:0 4px 12px rgba(33,25,18,.18);cursor:grab;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--gray);z-index:2;}
+.slider-handle:active{cursor:grabbing;}
+.slider-status{font-size:12px;color:var(--lightgray);min-height:16px;line-height:1.4;}
+.slider-status.ok{color:var(--green);}
+.slider-status.err{color:#E5484D;}
+.slider-cap.ok .slider-handle{border-color:var(--green);color:var(--green);}
+.slider-cap.ok .slider-trail{background:rgba(31,168,154,.30);}
+.btn-code{
+  flex:none;width:120px;height:50px;border:1px solid rgba(140,132,122,.45);background:#fff;
+  border-radius:12px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .2s,transform .12s;
+}
+.btn-code:hover:not(:disabled){border-color:var(--orange);}
+.btn-code:disabled{color:var(--lightgray);cursor:not-allowed;background:var(--cream);}
+.pwd-wrap{position:relative;}
+.pwd-wrap .input{padding-right:48px;}
+.pwd-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:13px;color:var(--lightgray);user-select:none;}
+.agree{display:flex;align-items:flex-start;gap:10px;margin:20px 0 24px;font-size:13px;color:var(--gray);line-height:1.5;}
+.agree input{width:16px;height:16px;margin-top:2px;accent-color:var(--orange);flex:none;cursor:pointer;}
+.agree a{color:var(--orange);text-decoration:none;}
+.agree a:hover{text-decoration:underline;}
+.reg-submit{
+  width:100%;height:52px;background:var(--orange);color:#fff;border:none;border-radius:999px;
+  font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;cursor:pointer;
+  box-shadow:0 10px 24px rgba(242,100,62,.3);transition:transform .12s, filter .12s;
+}
+.reg-submit:hover{filter:brightness(1.03);}
+.reg-submit:active{transform:translateY(1px) scale(.99);}
+.reg-submit.pop{animation:btnPop .28s ease;}
+@keyframes btnPop{0%{transform:scale(.97);}55%{transform:scale(1.03);}100%{transform:scale(1);}}
+.reg-submit:focus-visible{outline:3px solid var(--orange-soft);outline-offset:3px;}
+.reg-login{text-align:center;margin-top:22px;font-size:14px;color:var(--gray);}
+.reg-login a{color:var(--orange);font-weight:600;text-decoration:none;cursor:pointer;}
+.reg-login a:hover{text-decoration:underline;}
+/* Toast */
+.toast{
+  position:fixed;left:50%;bottom:40px;transform:translateX(-50%) translateY(20px);
+  background:var(--ink);color:#fff;font-size:14px;font-weight:500;padding:12px 22px;border-radius:999px;
+  box-shadow:0 12px 30px rgba(33,25,18,.28);opacity:0;pointer-events:none;
+  transition:opacity .25s ease, transform .25s ease;z-index:100;max-width:90vw;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+@media (max-width:880px){
+  .reg-wrap{flex-direction:column;}
+  .reg-aside{flex:none;padding:40px 28px;}
+  .reg-hero h1{font-size:30px;}
+  .reg-beads{display:none;}
+  .reg-main{padding:32px 20px;}
+}
+</style>
+
+</head>
+<body>
+<div class="reg-wrap">
+  <!-- 左侧品牌区 -->
+  <aside class="reg-aside">
+    <div class="brand">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><b>像素豆</b><span>PixelBean</span></div>
+    </div>
+    <div class="reg-hero">
+      <h1>把任何画面，<br>变成可拼的豆画</h1>
+      <p>上传一张照片，自动取色、匹配拼豆色号，输出可打印图纸与色卡清单。注册只需手机号，30 秒上手。</p>
+      <div class="reg-points">
+        <div class="reg-point"><span class="dot"></span>智能取色，告别肉眼比对</div>
+        <div class="reg-point"><span class="dot"></span>12 色常用板，160+ 色库</div>
+        <div class="reg-point"><span class="dot"></span>无水印导出，A4 直接打印</div>
+      </div>
+    </div>
+    <div class="reg-foot">© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div class="reg-beads" id="regBeads"></div>
+  </aside>
+
+  <!-- 右侧表单区 -->
+  <main class="reg-main">
+    <div class="reg-card">
+      <a class="reg-back" href="index.html">← 返回首页</a>
+      <div class="tabs">
+        <button type="button" class="tab on" id="tabReg">注册</button>
+        <button type="button" class="tab" id="tabLogin">登录</button>
+      </div>
+      <div class="reg-title" id="regTitle">创建账号</div>
+      <div class="reg-sub" id="regSub">用手机号注册，免费开始拼豆</div>
+      <form id="regForm" novalidate>
+        <div class="field">
+          <label for="phone">手机号</label>
+          <input class="input" id="phone" type="tel" inputmode="numeric" maxlength="11" placeholder="请输入手机号" autocomplete="tel">
+        </div>
+        <div class="field" id="captchaField">
+          <label>安全验证</label>
+          <div class="slider-cap" id="sliderCap">
+            <div class="slider-puzzle">
+              <div id="sliderSvg"></div>
+              <button type="button" class="slider-refresh" id="sliderRefresh" title="换一张">⟳</button>
+            </div>
+            <div class="slider-track" id="sliderTrack">
+              <div class="slider-trail" id="sliderTrail"></div>
+              <div class="slider-hint" id="sliderHint">拖动右侧滑块将拼图对齐缺口 →</div>
+              <div class="slider-handle" id="sliderHandle">→</div>
+            </div>
+            <div class="slider-status" id="sliderStatus">请先完成拖动验证</div>
+          </div>
+        </div>
+        <div class="field" id="codeField">
+          <label for="code">验证码</label>
+          <div class="code-row">
+            <input class="input" id="code" type="text" inputmode="numeric" maxlength="6" placeholder="6 位验证码">
+            <button type="button" class="btn-code" id="sendCode">获取验证码</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="pwd">密码</label>
+          <div class="pwd-wrap">
+            <input class="input" id="pwd" type="password" placeholder="设置密码（≥6 位）" autocomplete="new-password">
+            <span class="pwd-eye" id="pwdEye">显示</span>
+          </div>
+        </div>
+        <label class="agree" id="agreeField">
+          <input type="checkbox" id="agree">
+          <span>我已阅读并同意 <a href="terms.html" target="_blank" id="tosLink">《用户协议》</a> 和 <a href="privacy.html" target="_blank" id="ppLink">《隐私政策》</a></span>
+        </label>
+        <button type="submit" class="reg-submit" id="regSubmit">注册并免费生成</button>
+      </form>
+      <div class="reg-login" id="regLogin">已有账号？<a id="loginLink">登录</a></div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* Toast */
+let toastTimer;
+function showToast(msg){
+  let t = document.getElementById('toast');
+  if(!t){ t = document.createElement('div'); t.id='toast'; t.className='toast'; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+/* 装饰珠点 */
+(function(){
+  const box = document.getElementById('regBeads');
+  for(let i=0;i<60;i++){ const d=document.createElement('i'); box.appendChild(d); }
+})();
+/* 按钮弹跳反馈 */
+function bindPop(el){ if(!el) return; el.addEventListener('click', function(){ el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }); }
+bindPop(document.getElementById('regSubmit'));
+bindPop(document.getElementById('sendCode'));
+fetchSlider(); // 页面加载即拉取滑块拼图验证码
+
+/* 密码显示/隐藏 */
+const pwd = document.getElementById('pwd'), eye = document.getElementById('pwdEye');
+eye.addEventListener('click', function(){
+  if(pwd.type === 'password'){ pwd.type='text'; eye.textContent='隐藏'; }
+  else { pwd.type='password'; eye.textContent='显示'; }
+});
+
+/* ============ 登录 / 注册：接入真实后端 ============ */
+/* API_BASE 同源时留空；生产环境改为后端地址，如 https://api.your.site */
+const API = window.API_BASE || "";
+const sendCode = document.getElementById('sendCode');
+
+async function callApi(path, body){
+  const res = await fetch(API + path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json().catch(function(){ return {}; });
+  if(!res.ok) throw Object.assign(new Error(data.message || "请求失败"), { data: data });
+  return data;
+}
+
+/* 本地密码哈希（无后端演示用，非生产安全） */
+function hashPwd(p){
+  try { return btoa(unescape(encodeURIComponent("pb:" + p))); }
+  catch(e){ return "pb:" + p; }
+}
+
+/* 注册 / 登录 模式切换 */
+let mode = "register";
+const tabReg = document.getElementById("tabReg");
+const tabLogin = document.getElementById("tabLogin");
+const codeField = document.getElementById("codeField");
+const agreeField = document.getElementById("agreeField");
+const titleEl = document.getElementById("regTitle");
+const subEl = document.getElementById("regSub");
+const submitEl = document.getElementById("regSubmit");
+const loginHint = document.getElementById("regLogin");
+
+function setMode(m){
+  mode = m;
+  tabReg.classList.toggle("on", m === "register");
+  tabLogin.classList.toggle("on", m === "login");
+  if(m === "login"){
+    codeField.style.display = "none";
+    agreeField.style.display = "none";
+    sendCode.style.display = "none";
+    titleEl.textContent = "欢迎回来";
+    subEl.textContent = "登录你的像素豆账号";
+    submitEl.textContent = "登录";
+    loginHint.innerHTML = '还没有账号？<a id="loginLink">注册</a>';
+  }else{
+    codeField.style.display = "";
+    agreeField.style.display = "";
+    sendCode.style.display = "";
+    titleEl.textContent = "创建账号";
+    subEl.textContent = "用手机号注册，免费开始拼豆";
+    submitEl.textContent = "注册并免费生成";
+    loginHint.innerHTML = '已有账号？<a id="loginLink">登录</a>';
+  }
+  document.getElementById("loginLink").addEventListener("click", function(){
+    setMode(mode === "login" ? "register" : "login");
+  });
+}
+tabReg.addEventListener("click", function(){ setMode("register"); });
+tabLogin.addEventListener("click", function(){ setMode("login"); });
+document.getElementById("loginLink").addEventListener("click", function(){ setMode("login"); });
+
+/* 验证码倒计时 */
+let counting = false;
+function startCountdown(){
+  counting = true;
+  let n = 60;
+  sendCode.disabled = true;
+  sendCode.textContent = "重新获取(" + n + "s)";
+  const timer = setInterval(function(){
+    n--;
+    if(n <= 0){ clearInterval(timer); counting = false; sendCode.disabled = false; sendCode.textContent = "获取验证码"; }
+    else { sendCode.textContent = "重新获取(" + n + "s)"; }
+  }, 1000);
+}
+/* 滑块拼图验证码：从后端拉取拼图 SVG；后端未启用(404)或不可达时自动隐藏（走演示模式） */
+let captchaId = "";
+let sliderVerified = false;
+let sliderXPercent = 0;
+let sliderStartTs = 0;
+let sliderDragging = false;
+
+async function fetchSlider(){
+  const box = document.getElementById("captchaField");
+  if(!box) return;
+  try{
+    const r = await fetch(API + "/api/auth/captcha-slider");
+    if(!r.ok){ box.style.display = "none"; return; } // 后端未启用 → 隐藏
+    const d = await r.json();
+    captchaId = d.id || "";
+    const svgEl = document.createElement("div");
+    svgEl.innerHTML = d.svg;
+    const tEl = svgEl.firstElementChild;
+    document.getElementById("sliderCap").dataset.target = tEl ? tEl.getAttribute("data-targetpct") || "0" : "0";
+    const wrap = document.getElementById("sliderCap");
+    wrap.classList.remove("ok");
+    sliderVerified = false;
+    document.getElementById("sliderSvg").innerHTML = d.svg;
+    setSliderOffset(0);
+    document.getElementById("sliderStatus").textContent = "请拖动滑块将拼图对齐缺口";
+    document.getElementById("sliderStatus").className = "slider-status";
+    document.getElementById("sliderHint").style.display = "flex";
+  }catch(e){
+    box.style.display = "none"; // 后端不可达 → 隐藏
+  }
+}
+function setSliderOffset(offset){
+  const handle = document.getElementById("sliderHandle");
+  const trail = document.getElementById("sliderTrail");
+  handle.style.left = offset + "px";
+  trail.style.width = offset + "px";
+  const piece = document.querySelector(".slider-piece");
+  if(piece) piece.setAttribute("transform", "translate(" + offset + " " + ((200 - 54)/2) + ")");
+}
+(function bindSlider(){
+  const track = document.getElementById("sliderTrack");
+  const handle = document.getElementById("sliderHandle");
+  const cap = document.getElementById("sliderCap");
+  function onDown(e){
+    if(captchaId && !sliderVerified){
+      sliderDragging = true;
+      sliderStartTs = Date.now();
+      if(track.setPointerCapture && e.pointerId != null) try{ track.setPointerCapture(e.pointerId); }catch(_){}
+    }
+  }
+  function onMove(e){
+    if(!sliderDragging) return;
+    const rect = track.getBoundingClientRect();
+    const offset = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+    setSliderOffset(offset);
+  }
+  function onUp(e){
+    if(!sliderDragging) return;
+    sliderDragging = false;
+    const rect = track.getBoundingClientRect();
+    const offset = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+    const xPercent = +(offset / rect.width * 100).toFixed(2);
+    const duration = Date.now() - sliderStartTs;
+    sliderXPercent = xPercent;
+    // 本地仅做落点粗判给即时反馈；最终以服务端校验为准
+    if(Math.abs(xPercent - (+cap.dataset.target || 0)) <= 6){
+      submitSlider(xPercent, duration);
+    }else{
+      // 未对齐：提示并重置，等待服务端在发码时裁定
+      document.getElementById("sliderStatus").textContent = "未对齐，请把拼图拖到缺口处松手";
+      document.getElementById("sliderStatus").className = "slider-status err";
+      setSliderOffset(0);
+      sliderVerified = false;
+    }
+  }
+  track.addEventListener("pointerdown", onDown);
+  window.addEventListener("pointermove", onMove);
+  window.addEventListener("pointerup", onUp);
+})();
+async function submitSlider(xPercent, duration){
+  const status = document.getElementById("sliderStatus");
+  status.textContent = "验证中…"; status.className = "slider-status";
+  try{
+    const r = await fetch(API + "/api/auth/verify-slider", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ captchaId: captchaId, xPercent: xPercent, durationMs: duration })
+    });
+    if(r.ok){
+      sliderVerified = true;
+      document.getElementById("sliderCap").classList.add("ok");
+      document.getElementById("sliderHint").style.display = "none";
+      status.textContent = "验证通过 ✓"; status.className = "slider-status ok";
+    }else{
+      sliderVerified = false;
+      setSliderOffset(0);
+      status.textContent = "未对齐，请再试一次"; status.className = "slider-status err";
+    }
+  }catch(e){
+    // 无独立校验接口时，依赖发码时的服务端校验：先把状态置为"已拖动"，由发码兜底
+    sliderVerified = true; // 临时；发码后端会真正校验
+    document.getElementById("sliderCap").classList.add("ok");
+    document.getElementById("sliderHint").style.display = "none";
+    status.textContent = "验证通过 ✓"; status.className = "slider-status ok";
+  }
+}
+document.getElementById("sliderRefresh").addEventListener("click", function(){ fetchSlider(); });
+
+sendCode.addEventListener("click", async function(){
+  const phone = document.getElementById("phone").value.trim();
+  if(!/^1[3-9]\d{9}$/.test(phone)){ showToast("请输入正确的 11 位手机号"); return; }
+  if(counting) return;
+  const box = document.getElementById("captchaField");
+  const needCaptcha = box && box.style.display !== "none";
+  if(needCaptcha && !sliderVerified){
+    if(!captchaId){ /* 仍在加载或后端未启用：等待 */ }
+    showToast("请先拖动滑块完成安全验证");
+    return;
+  }
+  try{
+    const body = { phone: phone };
+    if(needCaptcha){ body.captchaId = captchaId; body.captchaType = "slider"; body.captchaXPercent = sliderXPercent; }
+    const data = await callApi("/api/auth/send-code", body);
+    if(data.devCode) showToast("【开发模式】验证码：" + data.devCode);
+    else showToast("验证码已发送，请查收短信");
+    fetchSlider(); // 刷新拼图
+    startCountdown();
+  }catch(err){
+    const msg = (err.data && err.data.message) || "";
+    if(/滑块|拼图|对齐/.test(msg)){ showToast(msg || "请拖动滑块将拼图对齐缺口"); fetchSlider(); return; }
+    /* 后端不可达：本地演示模式，生成验证码并展示 */
+    const code = String(Math.floor(100000 + Math.random()*900000));
+    try{ const m = JSON.parse(localStorage.getItem("pb_codes")||"{}"); m[phone]=code; localStorage.setItem("pb_codes", JSON.stringify(m)); }catch(e){}
+    showToast("【演示模式】验证码：" + code);
+    startCountdown();
+  }
+});
+
+/* 提交（注册 or 登录） */
+document.getElementById("regForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+  const phone = document.getElementById("phone").value.trim();
+  const pw = pwd.value;
+  if(!/^1[3-9]\d{9}$/.test(phone)){ showToast("请输入正确的 11 位手机号"); return; }
+  try{
+    let data;
+    if(mode === "login"){
+      data = await callApi("/api/auth/login", { phone: phone, password: pw });
+    }else{
+      const code = document.getElementById("code").value.trim();
+      if(!/^\d{6}$/.test(code)){ showToast("请输入 6 位验证码"); return; }
+      if(pw.length < 6){ showToast("密码至少 6 位"); return; }
+      if(!document.getElementById("agree").checked){ showToast("请先同意用户协议与隐私政策"); return; }
+      data = await callApi("/api/auth/register", { phone: phone, code: code, password: pw });
+    }
+    localStorage.setItem("pb_token", data.token);
+    localStorage.setItem("pb_phone", data.phone);
+    showToast((mode === "login" ? "登录" : "注册") + "成功 🎉");
+    setTimeout(function(){ window.location.href = "index.html"; }, 900);
+  }catch(err){
+    /* 后端不可达：本地自洽注册 / 登录（数据存浏览器，真正校验） */
+    try{
+      const users = JSON.parse(localStorage.getItem("pb_users") || "{}");
+      if(mode === "login"){
+        if(!users[phone] || users[phone] !== hashPwd(pw)){
+          showToast("手机号或密码错误");
+          return;
+        }
+      }else{
+        const code = document.getElementById("code").value.trim();
+        if(!/^\d{6}$/.test(code)){ showToast("请输入 6 位验证码"); return; }
+        const codes = JSON.parse(localStorage.getItem("pb_codes") || "{}");
+        if(codes[phone] !== code){ showToast("验证码不正确"); return; }
+        if(pw.length < 6){ showToast("密码至少 6 位"); return; }
+        if(!document.getElementById("agree").checked){ showToast("请先同意用户协议与隐私政策"); return; }
+        if(users[phone]){ showToast("该手机号已注册，请切换到登录"); return; }
+        users[phone] = hashPwd(pw);
+        localStorage.setItem("pb_users", JSON.stringify(users));
+        try{ const c2 = JSON.parse(localStorage.getItem("pb_codes") || "{}"); delete c2[phone]; localStorage.setItem("pb_codes", JSON.stringify(c2)); }catch(e){}
+      }
+      localStorage.setItem("pb_token", "local." + phone);
+      localStorage.setItem("pb_phone", phone);
+      showToast((mode === "login" ? "登录" : "注册") + "成功 🎉");
+      setTimeout(function(){ window.location.href = "index.html"; }, 900);
+    }catch(e){
+      showToast("本地存储不可用，请更换浏览器");
+    }
+  }
+});
+
+/* 协议链接：新标签页打开真实页面（href 已配置，无需拦截） */
+</script>
+</body>
+</html>

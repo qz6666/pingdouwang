@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品展示库 · 像素豆 PixelBean</title>
+  <meta name="description" content="社区拼豆作品展示，按分类浏览热门创作，获取配色与拼法灵感。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="作品展示库 · 像素豆 PixelBean">
+  <meta property="og:description" content="社区拼豆作品展示，按分类浏览热门创作，获取配色与拼法灵感。">
+  <meta property="og:url" content="https://pixelbean.example.com/gallery.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="作品展示库 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="社区拼豆作品展示，按分类浏览热门创作，获取配色与拼法灵感。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/gallery.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.gallery-main{max-width:1180px;margin:0 auto;padding:32px 24px 80px;}
+.gallery-top{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;}
+.gallery-top .title{font-size:30px;font-weight:900;}
+.gallery-top .sub{font-size:14px;color:var(--gray);margin-top:6px;}
+.gallery-top .count{font-size:13px;color:var(--gray);}
+
+/* 工具条 */
+.toolbar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:22px;}
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:4px 6px 4px 14px;flex:1;min-width:240px;}
+.search-box input{border:none;outline:none;font-size:15px;font-family:inherit;flex:1;background:transparent;padding:8px 0;}
+.search-box button{border:none;background:var(--orange);color:#fff;border-radius:9px;padding:8px 16px;font-weight:600;cursor:pointer;font-family:inherit;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{padding:8px 16px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:14px;font-weight:600;color:var(--gray);cursor:pointer;font-family:inherit;}
+.chip.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.sort-toggle{display:flex;border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.sort-toggle button{border:none;background:#fff;padding:9px 14px;font-size:13px;font-weight:600;color:var(--gray);cursor:pointer;font-family:inherit;}
+.sort-toggle button.active{background:var(--cream);color:var(--ink);}
+
+/* 网格 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;}
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(33,25,18,.05);}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(33,25,18,.1);}
+.card .thumb-wrap{aspect-ratio:1/1;background:var(--cream);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.card .thumb-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.card .thumb-ph{color:var(--lightgray);font-size:13px;}
+.card .body{padding:12px 14px 14px;}
+.card .name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card .badge{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:var(--orange);background:var(--cream);border-radius:999px;padding:2px 10px;}
+.card .meta{margin-top:8px;font-size:12px;color:var(--gray);display:flex;gap:10px;}
+.card .meta .views::before{content:"👁 ";}
+
+.empty{padding:60px;text-align:center;color:var(--lightgray);}
+.loadmore{display:block;margin:28px auto 0;padding:12px 30px;border:1px solid var(--border);background:#fff;border-radius:12px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink);}
+.loadmore:disabled{opacity:.45;cursor:default;}
+
+/* 详情弹层 */
+.modal-mask{position:fixed;inset:0;background:rgba(33,25,18,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+.modal-mask.show{display:flex;}
+.modal{background:#fff;border-radius:18px;max-width:680px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+.modal .m-img{width:100%;aspect-ratio:1/1;background:var(--cream);display:flex;align-items:center;justify-content:center;}
+.modal .m-img img{width:100%;height:100%;object-fit:contain;}
+.modal .m-body{padding:22px 24px 26px;}
+.modal .m-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.modal .m-name{font-size:22px;font-weight:800;}
+.modal .m-close{border:none;background:var(--cream);width:34px;height:34px;border-radius:10px;font-size:18px;cursor:pointer;flex:none;}
+.modal .m-tags{display:flex;gap:8px;margin:10px 0 16px;flex-wrap:wrap;font-size:12px;color:var(--gray);}
+.modal .m-tags .badge{color:var(--orange);background:var(--cream);border-radius:999px;padding:3px 10px;font-weight:600;}
+.modal .m-sec-title{font-size:13px;font-weight:700;color:var(--gray);margin:16px 0 10px;}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;}
+.swatch{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:5px 9px;font-size:12px;}
+.swatch .dot{width:18px;height:18px;border-radius:5px;border:1px solid rgba(0,0,0,.1);}
+.m-cta{display:inline-block;margin-top:20px;background:var(--orange);color:#fff;border-radius:12px;padding:11px 20px;font-weight:700;text-decoration:none;}
+@media (max-width:640px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .gallery-top .title{font-size:24px;}
+}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="gallery.html" style="color:var(--orange);font-weight:700;">展示库</a>
+    </nav>
+    <a class="site-cta" href="register.html">免费生成</a>
+  </div>
+</header>
+
+<main class="gallery-main">
+  <div class="gallery-top">
+    <div>
+      <div class="title">作品展示库</div>
+      <div class="sub">大家用像素豆做出来的豆画成品，点开可看配色方案。</div>
+    </div>
+    <div class="count" id="totalCount"></div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search-box">
+      <input type="search" id="searchInput" placeholder="搜索作品名称或分类…">
+      <button id="searchBtn">搜索</button>
+    </div>
+    <div class="chips" id="chips">
+      <button class="chip active" data-cat="">全部</button>
+      <button class="chip" data-cat="人物">人物</button>
+      <button class="chip" data-cat="动物">动物</button>
+      <button class="chip" data-cat="食物">食物</button>
+      <button class="chip" data-cat="自然">自然</button>
+      <button class="chip" data-cat="配饰">配饰</button>
+      <button class="chip" data-cat="卡通">卡通</button>
+    </div>
+    <div class="sort-toggle" id="sortToggle">
+      <button class="active" data-sort="latest">最新</button>
+      <button data-sort="popular">热门</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none;">暂无作品，去「免费生成」做一个吧 ✦</div>
+  <button class="loadmore" id="loadMore" style="display:none;">加载更多</button>
+</main>
+
+<!-- 详情弹层 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <div class="m-img" id="mImg"></div>
+    <div class="m-body">
+      <div class="m-head">
+        <div class="m-name" id="mName"></div>
+        <button class="m-close" id="mClose">×</button>
+      </div>
+      <div class="m-tags" id="mTags"></div>
+      <div class="m-sec-title">配色方案（共 <span id="mBeads">0</span> 颗豆）</div>
+      <div class="swatches" id="mSwatches"></div>
+      <a class="m-cta" href="decompose.html">用同类方案生成 →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+var state = { page: 1, size: 24, q: "", cat: "", sort: "latest", items: [], pages: 1, loading: false };
+
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+function fmtTs(ts) { if (!ts) return ""; var d = new Date(ts); var p = function (n) { return (n < 10 ? "0" : "") + n; }; return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()); }
+
+function thumbHTML(thumb) {
+  if (thumb && thumb.indexOf("data:image") === 0) return "<img src='" + esc(thumb) + "' alt=''>";
+  return "<div class='thumb-ph'>无缩略图</div>";
+}
+
+function load(reset) {
+  if (state.loading) return;
+  if (reset) { state.page = 1; state.items = []; }
+  state.loading = true;
+  var q = state.cat || state.q;
+  var url = "/api/gallery?page=" + state.page + "&size=" + state.size + "&sort=" + state.sort + "&q=" + encodeURIComponent(q);
+  fetch(url).then(function (r) { return r.json(); }).then(function (d) {
+    state.pages = d.pages || 1;
+    if (reset) state.items = d.items; else state.items = state.items.concat(d.items);
+    render(d.total);
+  }).catch(function () {
+    document.getElementById("empty").style.display = "block";
+    document.getElementById("empty").textContent = "加载失败，请确认后端服务已启动。";
+  }).then(function () { state.loading = false; });
+}
+
+function render(total) {
+  var grid = document.getElementById("grid");
+  document.getElementById("totalCount").textContent = "共 " + (total || 0) + " 件作品";
+  if (!state.items.length) {
+    grid.innerHTML = "";
+    document.getElementById("empty").style.display = "block";
+    document.getElementById("loadMore").style.display = "none";
+    return;
+  }
+  document.getElementById("empty").style.display = "none";
+  grid.innerHTML = state.items.map(function (it) {
+    var cnt = (it.scheme && it.scheme.length) || (it.colors && it.colors.length) || 0;
+    return "<div class='card' data-id='" + esc(it.id) + "'>" +
+      "<div class='thumb-wrap'>" + thumbHTML(it.thumb) + "</div>" +
+      "<div class='body'>" +
+        "<div class='name'>" + esc(it.source || "未命名") + "</div>" +
+        (it.subject ? "<span class='badge'>" + esc(it.subject) + "</span>" : "") +
+        "<div class='meta'><span>" + (it.size || "") + "×" + (it.size || "") + "</span><span>" + cnt + " 色</span><span class='views'>" + (it.views || 0) + "</span></div>" +
+      "</div></div>";
+  }).join("");
+  grid.querySelectorAll(".card").forEach(function (c) {
+    c.onclick = function () { openDetail(c.getAttribute("data-id")); };
+  });
+  var lm = document.getElementById("loadMore");
+  if (state.page < state.pages) { lm.style.display = "block"; lm.disabled = false; lm.textContent = "加载更多"; }
+  else { lm.style.display = state.items.length ? "none" : "none"; }
+}
+
+function openDetail(id) {
+  fetch("/api/gallery/" + encodeURIComponent(id)).then(function (r) { return r.json(); }).then(function (d) {
+    if (!d.ok) return;
+    var it = d.item;
+    document.getElementById("mImg").innerHTML = thumbHTML(it.thumb);
+    document.getElementById("mName").textContent = it.source || "未命名作品";
+    var tags = "";
+    if (it.subject) tags += "<span class='badge'>" + esc(it.subject) + "</span>";
+    tags += "<span>尺寸 " + (it.size || "") + "×" + (it.size || "") + "</span>";
+    tags += "<span>浏览 " + (it.views || 0) + "</span>";
+    tags += "<span>上传 " + fmtTs(it.ts) + "</span>";
+    document.getElementById("mTags").innerHTML = tags;
+    var scheme = (it.scheme && it.scheme.length) ? it.scheme : (it.colors || []).map(function (c) { return { color: c, count: 0 }; });
+    var totalBeads = 0;
+    var sw = scheme.map(function (s) {
+      var cnt = s.count || 0; totalBeads += cnt;
+      return "<div class='swatch'><span class='dot' style='background:" + esc(s.color) + "'></span>" + esc(s.color) + (cnt ? " ×" + cnt : "") + "</div>";
+    }).join("");
+    document.getElementById("mBeads").textContent = totalBeads || scheme.length;
+    document.getElementById("mSwatches").innerHTML = sw;
+    document.getElementById("modalMask").classList.add("show");
+  });
+}
+function closeModal() { document.getElementById("modalMask").classList.remove("show"); }
+document.getElementById("mClose").onclick = closeModal;
+document.getElementById("modalMask").onclick = function (e) { if (e.target === this) closeModal(); };
+
+/* 交互 */
+document.getElementById("searchBtn").onclick = function () {
+  state.q = document.getElementById("searchInput").value.trim();
+  state.cat = "";
+  document.querySelectorAll("#chips .chip").forEach(function (c) { c.classList.remove("active"); });
+  document.querySelector("#chips .chip[data-cat='']").classList.add("active");
+  load(true);
+};
+document.getElementById("searchInput").addEventListener("keydown", function (e) { if (e.key === "Enter") document.getElementById("searchBtn").click(); });
+document.querySelectorAll("#chips .chip").forEach(function (c) {
+  c.onclick = function () {
+    document.querySelectorAll("#chips .chip").forEach(function (x) { x.classList.remove("active"); });
+    c.classList.add("active");
+    state.cat = c.getAttribute("data-cat");
+    state.q = "";
+    document.getElementById("searchInput").value = "";
+    load(true);
+  };
+});
+document.querySelectorAll("#sortToggle button").forEach(function (b) {
+  b.onclick = function () {
+    document.querySelectorAll("#sortToggle button").forEach(function (x) { x.classList.remove("active"); });
+    b.classList.add("active");
+    state.sort = b.getAttribute("data-sort");
+    load(true);
+  };
+});
+document.getElementById("loadMore").onclick = function () {
+  if (state.page < state.pages) { state.page++; load(false); }
+};
+
+load(true);
+</script>
+</body>
+</html>

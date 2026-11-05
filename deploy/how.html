@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>怎么用 · 像素豆 PixelBean</title>
+  <meta name="description" content="拼豆玩法与步骤图解，从零开始学会拼豆。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="怎么玩 · 像素豆 PixelBean">
+  <meta property="og:description" content="拼豆玩法与步骤图解，从零开始学会拼豆。">
+  <meta property="og:url" content="https://pixelbean.example.com/how.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="怎么玩 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="拼豆玩法与步骤图解，从零开始学会拼豆。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/how.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="how.html" class="active">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">怎么用</div>
+    <div class="sec-title">三步，把照片变成豆画</div>
+    <div class="sec-sub">不需要任何设计基础。下面这个转换器可以直接玩——上传图片或点「用示例图」，立刻看效果。</div>
+  </div>
+
+  <section class="steps">
+    <div class="step">
+      <div class="step-num" style="color:var(--orange)">01</div>
+      <h3>上传照片</h3>
+      <p>拖入或选择一张图片，支持 JPG / PNG，手机相册直接导入。正方形构图效果最好。</p>
+    </div>
+    <div class="step">
+      <div class="step-num" style="color:var(--green)">02</div>
+      <h3>自动生成</h3>
+      <p>调整尺寸与配色，一键生成拼豆图纸和色卡清单。左侧点阵就是拼好后的样子。</p>
+    </div>
+    <div class="step">
+      <div class="step-num" style="color:var(--yellow)">03</div>
+      <h3>拼 &amp; 打印</h3>
+      <p>照屏幕预览拼好，或导出 A4 图纸，慢工出细活。色卡清单告诉你每种颜色买多少。</p>
+    </div>
+  </section>
+
+  <section class="card demo-panel">
+    <div class="demo-controls">
+      <div class="row">
+        <label>① 选择图片</label>
+        <button class="btn btn-primary" id="uploadBtn">上传图片</button>
+        <button class="btn btn-ghost" id="sampleBtn">用示例图</button>
+        <input type="file" id="fileInput" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>② 拼豆规格</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="15">15×15</button>
+          <button data-size="21">21×21</button>
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>③ 导出</label>
+        <button class="btn btn-yellow" id="dlBtn">下载图纸 PNG</button>
+      </div>
+    </div>
+    <div class="demo-canvas-wrap">
+      <canvas id="demoCanvas" width="640" height="640"></canvas>
+      <div class="legend" id="legend"></div>
+      <div class="demo-hint">提示：点阵颜色已自动匹配到 12 色官方色板，最接近原图。</div>
+    </div>
+  </section>
+
+  <div class="page-foot-note">这只是「怎么用」的实时演示。要生成无水印图纸、色卡清单和 A4 打印版，点右上角「免费生成」注册即可。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="templates.html">模板库</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  var canvas = document.getElementById("demoCanvas");
+  var size = 29;
+  var currentImg = PixelBean.makeSample();
+
+  function render() {
+    PixelBean.renderBeadArt(canvas, currentImg, size);
+    var counts = PixelBean.estimateCounts(currentImg, size).filter(function (c) { return c.count > 0; });
+    var box = document.getElementById("legend");
+    box.innerHTML = "";
+    counts.slice(0, 8).forEach(function (c) {
+      var chip = document.createElement("span");
+      chip.className = "legend-chip";
+      chip.innerHTML = '<i style="background:' + c.hex + '"></i>' + c.name + " ×" + c.count;
+      box.appendChild(chip);
+    });
+  }
+
+  document.getElementById("uploadBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+  });
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { currentImg = im; render(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("sampleBtn").addEventListener("click", function () {
+    currentImg = PixelBean.makeSample();
+    render();
+  });
+  document.querySelectorAll("#sizeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#sizeSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      size = parseInt(b.dataset.size, 10);
+      render();
+    });
+  });
+  document.getElementById("dlBtn").addEventListener("click", function () {
+    var a = document.createElement("a");
+    a.download = "pixelbean-图纸-" + size + "x" + size + ".png";
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

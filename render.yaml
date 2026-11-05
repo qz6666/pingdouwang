@@ -1,0 +1,18 @@
+# PixelBean · Render 部署配置（免费档 Web Service）
+# 用法：在 Render 新建 Web Service → 连接本仓库 → 自动按此配置部署
+services:
+  - type: web
+    name: pixelbean
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: npm install
+    startCommand: node server/index.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ALLOWED_ORIGIN
+        value: "*"
+      # 提示：PORT 由 Render 自动注入，应用读取 process.env.PORT，无需手动设置

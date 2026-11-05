@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>色卡清单 · 像素豆 PixelBean</title>
+  <meta name="description" content="12 色官方拼豆色板色卡，带色号与相近色，配色参考一目了然。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="色卡 · 像素豆 PixelBean">
+  <meta property="og:description" content="12 色官方拼豆色板色卡，带色号与相近色，配色参考一目了然。">
+  <meta property="og:url" content="https://pixelbean.example.com/colorcard.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="色卡 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="12 色官方拼豆色板色卡，带色号与相近色，配色参考一目了然。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/colorcard.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+#ccCanvas{width:100%;max-width:420px;aspect-ratio:1/1;background:#fff;border:1px solid var(--border);border-radius:14px;}
+.cc-head,.cc-row{display:grid;grid-template-columns:46px 1.2fr 1fr .8fr .9fr;gap:12px;align-items:center;}
+.cc-head{font-size:13px;font-weight:700;color:var(--gray);padding:0 12px 10px;border-bottom:1px solid var(--border);}
+.cc-row{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;font-size:14px;}
+.cc-sw{width:34px;height:34px;border-radius:8px;border:1px solid rgba(0,0,0,.08);box-shadow:inset 0 2px 6px rgba(255,255,255,.4);cursor:pointer;}
+.cc-nm{font-weight:600;color:var(--ink);}
+.cc-hex{font-family:'Outfit',sans-serif;color:var(--gray);cursor:pointer;}
+.cc-ct{font-family:'Outfit',sans-serif;font-weight:700;color:var(--ink);}
+.cc-buy{font-family:'Outfit',sans-serif;font-weight:600;color:var(--green);}
+.cc-summary{display:flex;gap:16px;flex-wrap:wrap;margin-top:18px;}
+.cc-summary .box{background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
+.cc-summary .k{font-size:12px;color:var(--gray);font-weight:600;}
+.cc-summary .v{font-size:20px;font-weight:800;color:var(--ink);font-family:'Outfit',sans-serif;margin-top:4px;}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html#features" class="active">功能</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">功能特性</div>
+    <div class="sec-title">色卡清单</div>
+    <div class="sec-sub">自动统计每种颜色的用量，生成一份购物清单。照着买、不浪费，拼完刚刚好。</div>
+  </div>
+
+  <section class="card color-tool">
+    <div class="ct-controls">
+      <div class="row">
+        <label>① 选择图片</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="uploadBtn">上传图片</button>
+          <button class="btn btn-ghost" id="sampleBtn">用示例图</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>② 拼豆规格</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+          <button data-size="57">57×57</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>③ 导出清单</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-yellow" id="dlBtn">下载清单 PNG</button>
+          <button class="btn btn-ghost" id="copyBtn">复制清单</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct-preview">
+      <div class="preview-label">拼豆预览</div>
+      <canvas id="ccCanvas" width="640" height="640"></canvas>
+      <div class="demo-hint">下方清单按所选规格统计每种色的用豆量，并给出建议购买包数（每包 100 颗）。</div>
+    </div>
+  </section>
+
+  <section class="match-section">
+    <div class="result-head">色卡购物清单（按规格统计 · 每包 100 颗）</div>
+    <div class="cc-head">
+      <div>色</div><div>名称</div><div>色号</div><div>用豆量</div><div>建议购买</div>
+    </div>
+    <div id="cardGrid"></div>
+    <div class="cc-summary">
+      <div class="box"><div class="k">总用豆量</div><div class="v" id="sumBeads">—</div></div>
+      <div class="box"><div class="k">建议购买总包数</div><div class="v" id="sumPacks">—</div></div>
+      <div class="box"><div class="k">用到的颜色</div><div class="v" id="sumColors">—</div></div>
+    </div>
+  </section>
+
+  <div class="page-foot-note">这只是「功能特性 · 色卡清单」的实时演示。其余功能（智能取色、多规格图纸、模板库、成品预览、一键打印）也可在「怎么用」与注册后体验。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="index.html#features">功能特性</a>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var canvas = document.getElementById("ccCanvas");
+  var size = 29;
+  var currentImg = PixelBean.makeSample();
+  var lastCounts = [];
+
+  function packs(n) { return Math.max(1, Math.ceil(n / 100)); }
+
+  function render() {
+    PixelBean.renderBeadArt(canvas, currentImg, size);
+    buildList();
+  }
+
+  function buildList() {
+    var counts = PixelBean.estimateCounts(currentImg, size).filter(function (c) { return c.count > 0; });
+    lastCounts = counts;
+    var grid = document.getElementById("cardGrid");
+    grid.innerHTML = "";
+    var totalBeads = 0, totalPacks = 0;
+    counts.forEach(function (c) {
+      totalBeads += c.count;
+      totalPacks += packs(c.count);
+      var row = document.createElement("div");
+      row.className = "cc-row";
+      row.innerHTML =
+        '<span class="cc-sw" data-hex="' + c.hex + '" style="background:' + c.hex + '"></span>' +
+        '<div class="cc-nm">' + c.name + '</div>' +
+        '<div class="cc-hex" data-hex="' + c.hex + '">' + c.hex.toUpperCase() + '</div>' +
+        '<div class="cc-ct">' + c.count + ' 颗</div>' +
+        '<div class="cc-buy">' + packs(c.count) + ' 包（' + packs(c.count) * 100 + ' 颗）</div>';
+      grid.appendChild(row);
+    });
+    grid.querySelectorAll("[data-hex]").forEach(function (el) {
+      el.addEventListener("click", function () { window.copyText(el.getAttribute("data-hex")); });
+    });
+    document.getElementById("sumBeads").textContent = totalBeads.toLocaleString() + " 颗";
+    document.getElementById("sumPacks").textContent = totalPacks + " 包";
+    document.getElementById("sumColors").textContent = counts.length + " 色";
+  }
+
+  document.getElementById("uploadBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+  });
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { currentImg = im; render(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("sampleBtn").addEventListener("click", function () {
+    currentImg = PixelBean.makeSample(); render();
+  });
+  document.querySelectorAll("#sizeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#sizeSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      size = parseInt(b.dataset.size, 10);
+      render();
+    });
+  });
+  document.getElementById("dlBtn").addEventListener("click", function () {
+    var W = 560, rowH = 56, top = 110;
+    var H = top + lastCounts.length * rowH + 90;
+    var c = document.createElement("canvas"); c.width = W; c.height = H;
+    var x = c.getContext("2d");
+    x.fillStyle = "#F6F1E7"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#241E18"; x.font = "bold 28px 'Noto Sans SC', sans-serif";
+    x.fillText("像素豆 色卡购物清单", 28, 50);
+    x.fillStyle = "#6E655A"; x.font = "14px 'Noto Sans SC', sans-serif";
+    x.fillText("规格 " + size + "×" + size + " · 每包 100 颗", 28, 78);
+    lastCounts.forEach(function (cc, i) {
+      var y = top + i * rowH;
+      x.fillStyle = cc.hex; x.fillRect(28, y, 34, 34);
+      x.fillStyle = "#241E18"; x.font = "16px 'Noto Sans SC', sans-serif";
+      x.fillText(cc.name, 76, y + 16);
+      x.fillStyle = "#6E655A"; x.font = "13px 'Outfit', sans-serif";
+      x.fillText(cc.hex.toUpperCase(), 76, y + 34);
+      x.fillStyle = "#241E18"; x.font = "16px 'Outfit', sans-serif";
+      x.fillText(cc.count + " 颗", 300, y + 22);
+      x.fillStyle = "#1FA89A"; x.font = "16px 'Outfit', sans-serif";
+      x.fillText(packs(cc.count) + " 包", 430, y + 22);
+    });
+    x.fillStyle = "#6E655A"; x.font = "13px 'Noto Sans SC', sans-serif";
+    x.fillText("共 " + lastCounts.reduce(function (s, c) { return s + c.count; }, 0) + " 颗 · 建议 " +
+      lastCounts.reduce(function (s, c) { return s + packs(c.count); }, 0) + " 包", 28, H - 30);
+    var a = document.createElement("a");
+    a.download = "pixelbean-色卡清单-" + size + "x" + size + ".png";
+    a.href = c.toDataURL("image/png");
+    a.click();
+  });
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var txt = "像素豆 色卡清单（" + size + "×" + size + "）\n" +
+      lastCounts.map(function (c) { return c.name + " " + c.hex.toUpperCase() + " ×" + c.count + " 颗 → 建议 " + packs(c.count) + " 包"; }).join("\n") +
+      "\n合计 " + lastCounts.reduce(function (s, c) { return s + c.count; }, 0) + " 颗";
+    window.copyText(txt);
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

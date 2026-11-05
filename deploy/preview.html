@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成品预览 · 像素豆 PixelBean</title>
+  <meta name="description" content="拼豆成品 3D 质感预览，先看清效果再动手拼。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="成品预览 · 像素豆 PixelBean">
+  <meta property="og:description" content="拼豆成品 3D 质感预览，先看清效果再动手拼。">
+  <meta property="og:url" content="https://pixelbean.example.com/preview.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="成品预览 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="拼豆成品 3D 质感预览，先看清效果再动手拼。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/preview.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+#pvCanvas{width:100%;max-width:440px;aspect-ratio:1/1;background:#fff;border:1px solid var(--border);border-radius:14px;}
+.pv-note{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;}
+.pv-note .tag{background:var(--cream);border:1px solid var(--border);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--gray);}
+.pv-note .tag b{color:var(--orange);}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html#features" class="active">功能</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">功能特性</div>
+    <div class="sec-title">成品预览</div>
+    <div class="sec-sub">实时渲染拼好后的效果，先预览再动手，避免拼错返工。一键切换「图纸」与「成品」两种视角。</div>
+  </div>
+
+  <section class="card color-tool">
+    <div class="ct-controls">
+      <div class="row">
+        <label>① 选择图片</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="uploadBtn">上传图片</button>
+          <button class="btn btn-ghost" id="sampleBtn">用示例图</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>② 拼豆规格</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+          <button data-size="57">57×57</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>③ 预览视角</label>
+        <div class="seg" id="viewSeg">
+          <button data-view="art" class="on">图纸</button>
+          <button data-view="product">成品</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>④ 导出</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-yellow" id="dlBtn">下载预览 PNG</button>
+          <button class="btn btn-ghost" data-go="register">去生成 ›</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct-preview">
+      <div class="preview-label">预览 · <span id="pvViewName">图纸</span></div>
+      <canvas id="pvCanvas" width="640" height="640"></canvas>
+      <div class="pv-note">
+        <span class="tag"><b>图纸</b>：平面点阵，用于对位拼搭</span>
+        <span class="tag"><b>成品</b>：熔接后的立体珠光效果</span>
+      </div>
+      <div class="demo-hint">切换「成品」可看到熨烫融合后的真实质感，照此验收拼搭效果。</div>
+    </div>
+  </section>
+
+  <div class="page-foot-note">这只是「功能特性 · 成品预览」的实时演示。其余功能（智能取色、多规格图纸、色卡清单、模板库、一键打印）也可在「怎么用」与注册后体验。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="index.html#features">功能特性</a>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var canvas = document.getElementById("pvCanvas");
+  var size = 29;
+  var view = "art";
+  var currentImg = PixelBean.makeSample();
+
+  function render() {
+    if (view === "product") PixelBean.renderProductPreview(canvas, currentImg, size);
+    else PixelBean.renderBeadArt(canvas, currentImg, size);
+    document.getElementById("pvViewName").textContent = view === "product" ? "成品" : "图纸";
+  }
+
+  document.getElementById("uploadBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+  });
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { currentImg = im; render(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("sampleBtn").addEventListener("click", function () {
+    currentImg = PixelBean.makeSample(); render();
+  });
+  document.querySelectorAll("#sizeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#sizeSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      size = parseInt(b.dataset.size, 10);
+      render();
+    });
+  });
+  document.querySelectorAll("#viewSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#viewSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      view = b.dataset.view;
+      render();
+    });
+  });
+  document.getElementById("dlBtn").addEventListener("click", function () {
+    var a = document.createElement("a");
+    a.download = "pixelbean-预览-" + (view === "product" ? "成品" : "图纸") + "-" + size + "x" + size + ".png";
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

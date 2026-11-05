@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>成品识别 · 像素豆 PixelBean</title>
+  <meta name="description" content="上传图片自动识别、取色并生成可拼的拼豆图纸，支持导出与存为模板。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="智能拼豆 · 像素豆 PixelBean">
+  <meta property="og:description" content="上传图片自动识别、取色并生成可拼的拼豆图纸，支持导出与存为模板。">
+  <meta property="og:url" content="https://pixelbean.example.com/decompose.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="智能拼豆 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="上传图片自动识别、取色并生成可拼的拼豆图纸，支持导出与存为模板。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/decompose.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+  .decomp-tool { display:flex; gap:28px; flex-wrap:wrap; }
+  .decomp-tool .ct-controls { flex:1 1 320px; min-width:300px; }
+  .decomp-tool .ct-preview { flex:1 1 360px; min-width:300px; }
+  .subject-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:6px; }
+  .subject-row input { flex:1 1 180px; padding:10px 12px; border:1.5px solid #E7DECB; border-radius:10px; font:600 15px 'Noto Sans SC',sans-serif; }
+  .calib-row { background:#FBF7EF; border:1px dashed #E2D6C2; border-radius:14px; padding:12px 14px; }
+  .calib-row input[type=range]{ width:100%; margin-top:6px; accent-color:#F2643E; }
+  .suppress-val { font-weight:700; color:var(--orange); }
+  .calib-actions { display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+  .btn-sm { padding:7px 12px; font-size:13px; }
+  .calib-wrap { position:relative; display:inline-block; width:100%; max-width:420px; line-height:0; }
+  .calib-wrap .thumb { width:100%; border-radius:12px; background:#fff; }
+  .corner { position:absolute; width:22px; height:22px; margin:-11px 0 0 -11px; border-radius:50%;
+    background:#F2643E; border:3px solid #fff; box-shadow:0 2px 8px rgba(0,0,0,.3); cursor:grab; touch-action:none; }
+  .crop-overlay { position:absolute; border:2px dashed #F2643E; background:rgba(242,100,62,.08); border-radius:8px; pointer-events:none; display:none; }
+  .corner[data-hidden="1"]{ display:none; }
+  .kb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px; margin-top:14px; }
+  .kb-card { border:1.5px solid #ECE3D2; border-radius:16px; padding:14px; background:#fff; }
+  .kb-thumb { width:100%; height:160px; object-fit:contain; border-radius:10px; background:#FBF7EF; }
+  .kb-name { font-weight:700; margin:10px 0 2px; }
+  .kb-meta { color:#8A8073; font-size:13px; }
+  .kb-chips { display:flex; gap:6px; flex-wrap:wrap; margin:10px 0; }
+  .kb-chip { width:20px; height:20px; border-radius:5px; box-shadow:inset 0 0 0 1px rgba(0,0,0,.08); }
+  .kb-actions { display:flex; gap:8px; margin:4px 0 6px; }
+  .kb-act { flex:1; font-size:13px; font-weight:600; color:#241E18; background:#F6F1E7; border:1px solid #E2D6C2; border-radius:9px; padding:7px 0; cursor:pointer; }
+  .kb-act:hover { background:#EFE7D8; }
+  .kb-del { font-size:13px; color:#C9434B; cursor:pointer; background:none; border:none; padding:4px 0; }
+  .kb-empty { color:#8A8073; padding:18px 0; }
+  @media (max-width:880px){ .decomp-tool{ flex-direction:column; } }
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html#features" class="active">功能</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">功能特性</div>
+    <div class="sec-title">成品识别 · 知识库</div>
+    <div class="sec-sub">上传一张「拼好的豆」成品照片，自动分解出里面的图像：逐格识别每颗豆的位置与颜色（带反光抑制与透视校准），并识别是否属于内置模板。分解结果可一键存入像素豆自己的知识库，还能反向生成可下载的图纸 / 模板。</div>
+  </div>
+
+  <section class="card color-tool">
+    <div class="ct-controls">
+      <div class="row">
+        <label>① 选择成品图片</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="uploadBtn">上传成品图</button>
+          <button class="btn btn-ghost" id="sampleBtn">用示例成品</button>
+          <button class="btn btn-ghost" id="earringBtn">用这张耳环测试</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>② 拼豆规格</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+          <button data-size="57">57×57</button>
+          <button data-size="80">80×80</button>
+        </div>
+      </div>
+      <div class="row">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="checkbox" id="cropToggle"> 智能裁剪（自动框选拼豆主体）
+        </label>
+      </div>
+      <div class="row calib-row" id="cropHint" style="display:none;">
+        <div class="demo-hint">开启后，系统会自动找出图片中拼豆最密集的正方形区域，避免盘子/背景把主体压没。下方会显示橙色取景框。</div>
+      </div>
+      <div class="row">
+        <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="checkbox" id="calibToggle"> 高级校准（反光抑制 · 四角透视）
+        </label>
+      </div>
+      <div class="row calib-row" id="calibRow" style="display:none;">
+        <label>③ 反光抑制：丢弃每格最亮像素的比例</label>
+        <input type="range" id="suppress" min="0" max="50" value="30">
+        <div>当前：<span class="suppress-val" id="suppressVal">30%</span>
+          <span style="color:#8A8073;">（豆面反光越强，调越高）</span></div>
+        <div class="calib-actions">
+          <button class="btn btn-ghost btn-sm" id="autoBtn">自动识别规格</button>
+          <button class="btn btn-ghost btn-sm" id="resetCalib">重置四角</button>
+        </div>
+        <div class="demo-hint">开启后，拖动右侧原图四角，使取景框对齐拼豆板边缘，可校正斜拍造成的透视变形；反光抑制可减少高光干扰。</div>
+      </div>
+      <div class="row">
+        <label>④ 保存为知识库条目</label>
+        <div class="subject-row">
+          <input id="subjectInput" placeholder="给这张成品起个名字（自动识别模板）" maxlength="20">
+          <button class="btn btn-yellow" id="saveBtn">存入知识库</button>
+        </div>
+        <div class="demo-hint" id="matchHint">上传或选示例后，会自动尝试识别图像。</div>
+      </div>
+    </div>
+
+    <div class="ct-preview">
+      <div class="preview-label">原图（开启裁剪/校准后可见取景框）</div>
+      <div class="calib-wrap" id="calibWrap">
+        <img id="thumb" class="thumb" alt="原图预览">
+        <div class="crop-overlay" id="cropOverlay"></div>
+        <span class="corner" data-c="0" data-hidden="1"></span>
+        <span class="corner" data-c="1" data-hidden="1"></span>
+        <span class="corner" data-c="2" data-hidden="1"></span>
+        <span class="corner" data-c="3" data-hidden="1"></span>
+      </div>
+      <div class="preview-label">分解重建（拼豆网格，逐格识别）</div>
+      <canvas id="reconCanvas" width="640" height="640"></canvas>
+    </div>
+  </section>
+
+  <section class="match-section">
+    <div class="result-head">分解结果 · 用豆量方案（按所选规格统计）</div>
+    <div class="bars" id="scheme"></div>
+    <div class="demo-hint">颜色已自动匹配到 12 色官方色板。保存到知识库后，可在下方「我的知识库」查看、下载图纸或存为模板。</div>
+  </section>
+
+  <section class="match-section">
+    <div class="result-head">我的知识库</div>
+    <div class="kb-grid" id="kbGrid"></div>
+    <div class="kb-empty" id="kbEmpty">还没有条目。分解一张成品并点「存入知识库」试试。</div>
+  </section>
+
+  <div class="page-foot-note">知识库优先存到数据后端（server/api.js 的 /api/kb，本地 localhost:4000 可用）；公网静态站无后端时自动回退到本机浏览器 localStorage。存入的「网格」可用于反向生成图纸与模板。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="index.html#features">功能特性</a>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">工具</div>
+        <a href="color.html">智能取色</a>
+        <a href="decompose.html">成品识别</a>
+        <a href="templates.html">模板库</a>
+        <a href="print.html">一键打印</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/api.js"></script>
+<script>
+(function () {
+  "use strict";
+  var thumbImg = document.getElementById("thumb");
+  var recon = document.getElementById("reconCanvas");
+  var subjectInput = document.getElementById("subjectInput");
+  var size = 29, k = 8, suppress = 0.30;
+  var currentImg = PixelBean.makeSample();
+  var lastGrid = null, lastScheme = [], lastSubject = "未识别";
+  var kbMap = {};
+
+  /* ---------- 源图 / 透视校准 ---------- */
+  var srcCache = null;
+  var warpCanvas = null, warpDirty = true, calibrated = false;
+  var corners = [
+    { x: 0.06, y: 0.06 }, { x: 0.94, y: 0.06 },
+    { x: 0.94, y: 0.94 }, { x: 0.06, y: 0.94 }
+  ];
+  var autoCropEnabled = false, cropRegion = null; // {x,y,w,h} in normalized coords
+  var cropOverlay = document.getElementById("cropOverlay");
+
+  /* ---------- 智能裁剪：以“中心彩色图案”为锚点框选拼豆主体 ---------- */
+  function getPixels(cvs) {
+    var ctx = cvs.getContext("2d");
+    return { w: cvs.width, h: cvs.height, data: ctx.getImageData(0, 0, cvs.width, cvs.height).data };
+  }
+  function colorAnchor(pixels) {
+    var w = pixels.w, h = pixels.h, d = pixels.data;
+    var mask = new Uint8Array(w * h);
+    for (var i = 0; i < w * h; i++) {
+      var r = d[i * 4], g = d[i * 4 + 1], b = d[i * 4 + 2];
+      var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+      var sat = mx > 0 ? (mx - mn) / mx : 0;
+      var bright = (r + g + b) / 3;
+      var isYellow = r > 170 && g > 170 && b < 130 && Math.abs(r - g) < 55;
+      var isSaturated = sat > 0.35 && bright > 80 && bright < 230;
+      if (isYellow || isSaturated) mask[i] = 1;
+    }
+    var seen = new Uint8Array(w * h);
+    var best = { count: 0, cells: [] };
+    for (var y = 0; y < h; y++) {
+      for (var x = 0; x < w; x++) {
+        var idx = y * w + x;
+        if (!mask[idx] || seen[idx]) continue;
+        var stack = [idx]; seen[idx] = 1; var cells = [idx];
+        while (stack.length) {
+          var cur = stack.pop();
+          var cx = cur % w, cy = Math.floor(cur / w);
+          var nbrs = [cur + 1, cur - 1, cur + w, cur - w];
+          for (var k = 0; k < 4; k++) {
+            var ni = nbrs[k];
+            if (ni < 0 || ni >= w * h) continue;
+            var nx = ni % w, ny = Math.floor(ni / w);
+            if (Math.abs(nx - cx) + Math.abs(ny - cy) !== 1) continue;
+            if (mask[ni] && !seen[ni]) { seen[ni] = 1; stack.push(ni); cells.push(ni); }
+          }
+        }
+        if (cells.length > best.count) best = { count: cells.length, cells: cells };
+      }
+    }
+    if (best.count < 10) return null;
+    var minx = w, miny = h, maxx = 0, maxy = 0;
+    best.cells.forEach(function (idx) {
+      var x = idx % w, y = Math.floor(idx / w);
+      minx = Math.min(minx, x); miny = Math.min(miny, y);
+      maxx = Math.max(maxx, x); maxy = Math.max(maxy, y);
+    });
+    return { minx: minx, miny: miny, maxx: maxx, maxy: maxy, w: w, h: h };
+  }
+  function autoCrop(srcCanvas) {
+    if (!autoCropEnabled) return srcCanvas;
+    var px = getPixels(srcCanvas);
+    var anchor = colorAnchor(px);
+    if (!anchor) { cropRegion = null; drawCropOverlay(); return srcCanvas; }
+    var yw = anchor.maxx - anchor.minx, yh = anchor.maxy - anchor.miny;
+    var yside = Math.max(yw, yh);
+    var side = Math.round(yside * 3.5);
+    var cx = Math.floor((anchor.minx + anchor.maxx) / 2);
+    var cy = Math.floor((anchor.miny + anchor.maxy) / 2);
+    var x1 = Math.max(0, cx - Math.floor(side / 2));
+    var y1 = Math.max(0, cy - Math.floor(side / 2));
+    var x2 = Math.min(px.w, x1 + side); var y2 = Math.min(px.h, y1 + side);
+    if (x2 - x1 !== y2 - y1) {
+      var ns = Math.min(x2 - x1, y2 - y1); x2 = x1 + ns; y2 = y1 + ns;
+    }
+    cropRegion = { x: x1 / px.w, y: y1 / px.h, w: (x2 - x1) / px.w, h: (y2 - y1) / px.h };
+    var c = document.createElement("canvas");
+    c.width = x2 - x1; c.height = y2 - y1;
+    c.getContext("2d").drawImage(srcCanvas, x1, y1, x2 - x1, y2 - y1, 0, 0, c.width, c.height);
+    drawCropOverlay();
+    return c;
+  }
+  function drawCropOverlay() {
+    if (!cropRegion || !autoCropEnabled) { cropOverlay.style.display = "none"; return; }
+    var rect = thumbImg.getBoundingClientRect();
+    var wrapRect = wrap.getBoundingClientRect();
+    cropOverlay.style.display = "block";
+    cropOverlay.style.left = (cropRegion.x * rect.width + rect.left - wrapRect.left) + "px";
+    cropOverlay.style.top = (cropRegion.y * rect.height + rect.top - wrapRect.top) + "px";
+    cropOverlay.style.width = (cropRegion.w * rect.width) + "px";
+    cropOverlay.style.height = (cropRegion.h * rect.height) + "px";
+  }
+
+  function getSrc() {
+    if (srcCache && srcCache.img === currentImg) return srcCache.canvas;
+    var sw = currentImg.width || currentImg.naturalWidth;
+    var sh = currentImg.height || currentImg.naturalHeight;
+    var cap = 1100, scale = Math.min(1, cap / Math.max(sw, sh));
+    var c = document.createElement("canvas");
+    c.width = Math.round(sw * scale); c.height = Math.round(sh * scale);
+    c.getContext("2d").drawImage(currentImg, 0, 0, c.width, c.height);
+    srcCache = { img: currentImg, canvas: c };
+    return c;
+  }
+  function getWarp() {
+    if (!calibrated) return null;
+    if (warpDirty) { warpCanvas = warpBoard(getSrc(), corners, 600); warpDirty = false; }
+    return warpCanvas;
+  }
+  function activeSrc() { return calibrated ? getWarp() : autoCrop(getSrc()); }
+
+  /* ---------- 线性代数：解 8 参数透视变换 ---------- */
+  function solveLinear(A, b) {
+    var n = b.length;
+    var M = A.map(function (row, i) { var r = row.slice(); r.push(b[i]); return r; });
+    for (var col = 0; col < n; col++) {
+      var piv = col;
+      for (var r = col + 1; r < n; r++) if (Math.abs(M[r][col]) > Math.abs(M[piv][col])) piv = r;
+      if (Math.abs(M[piv][col]) < 1e-12) continue;
+      var tmp = M[col]; M[col] = M[piv]; M[piv] = tmp;
+      var d = M[col][col];
+      for (var j = col; j <= n; j++) M[col][j] /= d;
+      for (var rr = 0; rr < n; rr++) {
+        if (rr === col) continue;
+        var f = M[rr][col]; if (f === 0) continue;
+        for (var jj = col; jj <= n; jj++) M[rr][jj] -= f * M[col][jj];
+      }
+    }
+    return M.map(function (row) { return row[n]; });
+  }
+  function solveH(src, dst) {
+    var A = [], B = [];
+    for (var i = 0; i < 4; i++) {
+      var u = dst[i].x, v = dst[i].y, x = src[i].x, y = src[i].y;
+      A.push([u, v, 1, 0, 0, 0, -u * x, -v * x]); B.push(x);
+      A.push([0, 0, 0, u, v, 1, -u * y, -v * y]); B.push(y);
+    }
+    var X = solveLinear(A, B);
+    return function (u, v) {
+      var d = X[6] * u + X[7] * v + 1;
+      return { x: (X[0] * u + X[1] * v + X[2]) / d, y: (X[3] * u + X[4] * v + X[5]) / d };
+    };
+  }
+  function warpBoard(srcCanvas, cs, outSize) {
+    var sw = srcCanvas.width, sh = srcCanvas.height;
+    var srcPts = cs.map(function (p) { return { x: p.x * sw, y: p.y * sh }; });
+    var dstPts = [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 1, y: 1 }, { x: 0, y: 1 }];
+    var map = solveH(srcPts, dstPts);
+    var out = document.createElement("canvas"); out.width = outSize; out.height = outSize;
+    var octx = out.getContext("2d");
+    var imgData = octx.createImageData(outSize, outSize);
+    var od = imgData.data;
+    var sctx = srcCanvas.getContext("2d"); var sd = sctx.getImageData(0, 0, sw, sh).data;
+    for (var oy = 0; oy < outSize; oy++) {
+      var v = oy / (outSize - 1);
+      for (var ox = 0; ox < outSize; ox++) {
+        var u = ox / (outSize - 1), sp = map(u, v), sx = sp.x, sy = sp.y;
+        var o = (oy * outSize + ox) * 4;
+        if (sx < 0 || sy < 0 || sx > sw - 1 || sy > sh - 1) { od[o + 3] = 0; continue; }
+        var x0 = Math.floor(sx), y0 = Math.floor(sy);
+        var x1 = Math.min(x0 + 1, sw - 1), y1 = Math.min(y0 + 1, sh - 1);
+        var fx = sx - x0, fy = sy - y0;
+        var i00 = (y0 * sw + x0) * 4, i10 = (y0 * sw + x1) * 4, i01 = (y1 * sw + x0) * 4, i11 = (y1 * sw + x1) * 4;
+        for (var ch = 0; ch < 3; ch++) {
+          var a = sd[i00 + ch] * (1 - fx) + sd[i10 + ch] * fx;
+          var b = sd[i01 + ch] * (1 - fx) + sd[i11 + ch] * fx;
+          od[o + ch] = a * (1 - fy) + b * fy;
+        }
+        od[o + 3] = 255;
+      }
+    }
+    octx.putImageData(imgData, 0, 0);
+    return out;
+  }
+
+  /* ---------- 逐格精确取色：中心窗口 + 中位数 + 反光抑制 ---------- */
+  function extractGrid(srcCanvas, N, supp) {
+    var W = srcCanvas.width, H = srcCanvas.height;
+    var side = Math.min(W, H);
+    var ox = Math.floor((W - side) / 2), oy = Math.floor((H - side) / 2);
+    var data = srcCanvas.getContext("2d").getImageData(ox, oy, side, side).data;
+    var grid = new Uint8ClampedArray(N * N * 4);
+    var cell = side / N, hw = cell * 0.25; // 中心 50% 窗口，避开格间缝隙
+    var filled = 0, varSum = 0;
+    for (var r = 0; r < N; r++) {
+      for (var c = 0; c < N; c++) {
+        var ccx = (c + 0.5) * cell, ccy = (r + 0.5) * cell;
+        var x0 = Math.max(0, Math.floor(ccx - hw)), x1 = Math.min(side - 1, Math.ceil(ccx + hw));
+        var y0 = Math.max(0, Math.floor(ccy - hw)), y1 = Math.min(side - 1, Math.ceil(ccy + hw));
+        var lum = [], ns = 0, sL = 0, sL2 = 0;
+        for (var yy = y0; yy <= y1; yy++) {
+          var rowOff = yy * side;
+          for (var xx = x0; xx <= x1; xx++) {
+            var i = (rowOff + xx) * 4;
+            if (data[i + 3] < 10) continue;
+            var R = data[i], G = data[i + 1], B = data[i + 2];
+            var L = 0.299 * R + 0.587 * G + 0.114 * B;
+            lum.push({ R: R, G: G, B: B, L: L });
+            ns++; sL += L; sL2 += L * L;
+          }
+        }
+        var idx = (r * N + c) * 4;
+        if (ns === 0) { grid[idx + 3] = 0; continue; }
+        lum.sort(function (a, b) { return a.L - b.L; });
+        var keep = Math.max(1, ns - Math.floor(ns * supp)); // 丢弃最亮 supp 比例（反光）
+        var sub = lum.slice(0, keep);
+        var mid = Math.floor(sub.length / 2);
+        var mR = sub[mid].R, mG = sub[mid].G, mB = sub[mid].B;
+        grid[idx] = mR; grid[idx + 1] = mG; grid[idx + 2] = mB; grid[idx + 3] = 255;
+        var mx = Math.max(mR, mG, mB), mn = Math.min(mR, mG, mB), sat = (mx - mn) / (mx || 1);
+        if (!(mx > 244 && sat < 0.05)) filled++;
+        var meanL = sL / ns; varSum += (sL2 / ns - meanL * meanL);
+      }
+    }
+    var meanVar = varSum / (N * N) / (255 * 255);
+    return { grid: grid, filled: filled / (N * N), meanVar: meanVar };
+  }
+
+  /* ---------- 模板识别 ---------- */
+  function vec12(scheme) {
+    var v = new Array(12).fill(0), total = 0;
+    scheme.forEach(function (c) { v[c.idx] = c.count; total += c.count; });
+    if (total > 0) v = v.map(function (n) { return n / total; });
+    return v;
+  }
+  function overlap(a, b) { var s = 0; for (var i = 0; i < 12; i++) s += Math.min(a[i], b[i]); return s; }
+  function matchTemplate(scheme, sz) {
+    var inv = vec12(scheme), best = null, bestO = 0.82;
+    PixelBean.TEMPLATES.forEach(function (t) {
+      var tv = vec12(PixelBean.estimateCounts(t.make(), sz));
+      var o = overlap(inv, tv);
+      if (o > bestO) { bestO = o; best = t.name; }
+    });
+    return best;
+  }
+
+  function renderScheme(scheme) {
+    var max = scheme.length ? scheme[0].count : 1;
+    var box = document.getElementById("scheme");
+    box.innerHTML = "";
+    scheme.forEach(function (c) {
+      var row = document.createElement("div"); row.className = "bar-row";
+      var pct = Math.round(c.count / max * 100);
+      row.innerHTML =
+        '<div class="nm">' + c.name + '</div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + c.hex + '"></div></div>' +
+        '<div class="ct">' + c.count + '</div>';
+      box.appendChild(row);
+    });
+  }
+
+  function decompose() {
+    var res = extractGrid(activeSrc(), size, suppress);
+    lastGrid = res.grid;
+    PixelBean.renderBeadArtGrid(recon, lastGrid, size);
+    var hint = document.getElementById("matchHint");
+    function done(data) {
+      lastScheme = data.scheme || [];
+      renderScheme(lastScheme);
+      var m = matchTemplate(lastScheme, size);
+      lastSubject = m || "未识别";
+      subjectInput.value = lastSubject;
+      var emptyPct = Math.round((1 - res.filled) * 100);
+      hint.textContent = (m ? ("已识别为内置模板：「" + m + "」") : "未匹配到内置模板，可手动命名后保存。")
+        + " · 网格 " + size + "×" + size + "，空格约 " + emptyPct + "%";
+    }
+    if (window.PixelBeanAPI) {
+      window.PixelBeanAPI.processGrid(lastGrid, size).then(done).catch(function () {
+        done({ scheme: PixelBean.estimateCountsFromGrid(lastGrid, size) });
+      });
+    } else {
+      done({ scheme: PixelBean.estimateCountsFromGrid(lastGrid, size) });
+    }
+  }
+
+  /* ---------- 知识库存取 ---------- */
+  function loadKB() {
+    if (window.PixelBeanAPI) {
+      return window.PixelBeanAPI.health().then(function (h) {
+        if (!h) throw new Error("no backend");
+        return fetch("/api/kb").then(function (r) { return r.json(); }).then(function (d) { return d.items || []; });
+      }).catch(function () { return JSON.parse(localStorage.getItem("pb_kb") || "[]"); });
+    }
+    return Promise.resolve(JSON.parse(localStorage.getItem("pb_kb") || "[]"));
+  }
+  function authHeaders(extra) {
+    var h = Object.assign({ "Content-Type": "application/json" }, extra || {});
+    var t = localStorage.getItem("pb_token");
+    if (t) h["Authorization"] = "Bearer " + t;
+    return h;
+  }
+  function saveKB(rec) {
+    if (window.PixelBeanAPI) {
+      return window.PixelBeanAPI.health().then(function (h) {
+        if (!h) throw new Error("no backend");
+        return fetch("/api/kb", { method: "POST", headers: authHeaders(), body: JSON.stringify(rec) })
+          .then(function (r) { if (!r.ok) throw new Error("http " + r.status); return r.json(); });
+      }).catch(function () {
+        var arr = JSON.parse(localStorage.getItem("pb_kb") || "[]");
+        rec.id = "kb_" + Date.now().toString(36); arr.unshift(rec);
+        localStorage.setItem("pb_kb", JSON.stringify(arr)); return { ok: true, local: true };
+      });
+    }
+    var arr = JSON.parse(localStorage.getItem("pb_kb") || "[]");
+    rec.id = "kb_" + Date.now().toString(36); arr.unshift(rec);
+    localStorage.setItem("pb_kb", JSON.stringify(arr));
+    return Promise.resolve({ ok: true, local: true });
+  }
+  function deleteKB(id) {
+    if (window.PixelBeanAPI) {
+      return window.PixelBeanAPI.health().then(function (h) {
+        if (!h) throw new Error("no backend");
+        return fetch("/api/kb/" + id, { method: "DELETE" }).then(function () {});
+      }).catch(function () {
+        var arr = JSON.parse(localStorage.getItem("pb_kb") || "[]").filter(function (x) { return x.id !== id; });
+        localStorage.setItem("pb_kb", JSON.stringify(arr));
+      });
+    }
+    var arr = JSON.parse(localStorage.getItem("pb_kb") || "[]").filter(function (x) { return x.id !== id; });
+    localStorage.setItem("pb_kb", JSON.stringify(arr));
+    return Promise.resolve();
+  }
+
+  function thumbDataURL() {
+    var c = document.createElement("canvas"); c.width = 160; c.height = 160;
+    var x = c.getContext("2d"); x.fillStyle = "#FBF7EF"; x.fillRect(0, 0, 160, 160);
+    x.drawImage(recon, 0, 0, 160, 160);
+    return c.toDataURL("image/png");
+  }
+  function triggerDownload(url, name) {
+    var a = document.createElement("a"); a.href = url; a.download = name; a.click();
+  }
+  function downloadBlueprint(it) {
+    var c = document.createElement("canvas"); c.width = 640; c.height = 640;
+    PixelBean.renderBlueprintGrid(c, it.grid, it.size, 36);
+    triggerDownload(c.toDataURL("image/png"), "pixelbean-图纸-" + (it.subject || "成品") + "-" + it.size + ".png");
+  }
+  function saveToTemplateLib(it) {
+    var arr = JSON.parse(localStorage.getItem("pb_custom_templates") || "[]");
+    if (!arr.some(function (t) { return t.id === it.id; })) {
+      arr.push({ id: it.id, name: it.subject, cat: "我的模板", grid: it.grid, size: it.size });
+      localStorage.setItem("pb_custom_templates", JSON.stringify(arr));
+    }
+    window.showToast && window.showToast("已存为模板库「我的模板」✶ 去模板库查看");
+  }
+
+  function renderKB(items) {
+    kbMap = {};
+    var grid = document.getElementById("kbGrid");
+    document.getElementById("kbEmpty").style.display = items.length ? "none" : "block";
+    grid.innerHTML = "";
+    items.forEach(function (it) {
+      kbMap[it.id] = it;
+      var card = document.createElement("div"); card.className = "kb-card";
+      var chips = (it.scheme || []).slice(0, 8).map(function (c) {
+        return '<span class="kb-chip" style="background:' + c.hex + '" title="' + c.name + '"></span>';
+      }).join("");
+      card.innerHTML =
+        (it.thumb ? '<img class="kb-thumb" src="' + it.thumb + '" alt="">' : '<div class="kb-thumb"></div>') +
+        '<div class="kb-name">' + (it.subject || "未识别") + '</div>' +
+        '<div class="kb-meta">' + (it.source || "") + ' · ' + (it.size || 29) + '×' + (it.size || 29) + ' · ' + (it.scheme || []).reduce(function (a, c) { return a + c.count; }, 0) + ' 颗</div>' +
+        '<div class="kb-chips">' + chips + '</div>' +
+        '<div class="kb-actions">' +
+          '<button class="kb-act" data-act="blueprint" data-id="' + it.id + '">下载图纸</button>' +
+          '<button class="kb-act" data-act="template" data-id="' + it.id + '">存为模板</button>' +
+        '</div>' +
+        '<button class="kb-del" data-id="' + it.id + '">删除</button>';
+      grid.appendChild(card);
+    });
+    grid.querySelectorAll(".kb-act").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var it = kbMap[b.getAttribute("data-id")]; if (!it) return;
+        if (b.getAttribute("data-act") === "blueprint") downloadBlueprint(it);
+        else saveToTemplateLib(it);
+      });
+    });
+    grid.querySelectorAll(".kb-del").forEach(function (b) {
+      b.addEventListener("click", function () { deleteKB(b.getAttribute("data-id")).then(refreshKB); });
+    });
+  }
+  function refreshKB() { loadKB().then(renderKB); }
+
+  /* ---------- 事件 ---------- */
+  function setThumb(src) {
+    thumbImg.src = src;
+    thumbImg.onload = function () { drawCropOverlay(); };
+  }
+  function setSize(n) {
+    size = n;
+    document.querySelectorAll("#sizeSeg button").forEach(function (x) { x.classList.toggle("on", parseInt(x.dataset.size, 10) === n); });
+    decompose();
+  }
+  document.getElementById("uploadBtn").addEventListener("click", function () { document.getElementById("fileInput").click(); });
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    var f = e.target.files[0]; if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { currentImg = im; srcCache = null; warpDirty = true; cropRegion = null; setThumb(ev.target.result); decompose(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("sampleBtn").addEventListener("click", function () {
+    currentImg = PixelBean.makeSample(); srcCache = null; warpDirty = true; cropRegion = null; setThumb(currentImg.toDataURL("image/png")); decompose();
+  });
+  document.getElementById("earringBtn").addEventListener("click", function () {
+    var im = new Image(); im.crossOrigin = "anonymous";
+    im.onload = function () {
+      currentImg = im; srcCache = null; warpDirty = true; cropRegion = null;
+      autoCropEnabled = true;
+      document.getElementById("cropToggle").checked = true;
+      document.getElementById("cropHint").style.display = "block";
+      setSize(23);
+      setThumb("assets/test/earrings.png");
+    };
+    im.onerror = function () { window.showToast && window.showToast("测试图加载失败"); };
+    im.src = "assets/test/earrings.png";
+  });
+  document.getElementById("cropToggle").addEventListener("change", function (e) {
+    autoCropEnabled = e.target.checked;
+    document.getElementById("cropHint").style.display = autoCropEnabled ? "block" : "none";
+    srcCache = null; warpDirty = true; decompose();
+  });
+  window.addEventListener("resize", drawCropOverlay);
+  document.querySelectorAll("#sizeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () { setSize(parseInt(b.dataset.size, 10)); });
+  });
+  document.getElementById("calibToggle").addEventListener("change", function (e) {
+    calibrated = e.target.checked;
+    document.getElementById("calibRow").style.display = calibrated ? "block" : "none";
+    document.querySelectorAll(".corner").forEach(function (h) { h.setAttribute("data-hidden", calibrated ? "0" : "1"); });
+    warpDirty = true; decompose();
+  });
+  document.getElementById("suppress").addEventListener("input", function (e) {
+    suppress = parseInt(e.target.value, 10) / 100;
+    document.getElementById("suppressVal").textContent = e.target.value + "%";
+    decompose();
+  });
+  document.getElementById("autoBtn").addEventListener("click", function () {
+    var src = activeSrc(), best = size, bestScore = -1;
+    [23, 29, 40, 57, 80].forEach(function (n) {
+      var r = extractGrid(src, n, 0.30);
+      var score = r.filled * Math.exp(-r.meanVar * 12);
+      if (score > bestScore) { bestScore = score; best = n; }
+    });
+    setSize(best);
+    window.showToast && window.showToast("自动识别建议规格：" + best + "×" + best);
+  });
+  document.getElementById("resetCalib").addEventListener("click", function () {
+    corners = [{ x: 0.06, y: 0.06 }, { x: 0.94, y: 0.06 }, { x: 0.94, y: 0.94 }, { x: 0.06, y: 0.94 }];
+    positionCorners(); warpDirty = true; decompose();
+  });
+  document.getElementById("saveBtn").addEventListener("click", function () {
+    if (!lastGrid) { window.showToast && window.showToast("请先分解一张成品"); return; }
+    var rec = {
+      source: (subjectInput.value || "未识别") + " 的成品",
+      subject: subjectInput.value || "未识别",
+      size: size,
+      thumb: thumbDataURL(),
+      colors: [],
+      scheme: lastScheme,
+      grid: Array.from(lastGrid)
+    };
+    saveKB(rec).then(function (r) {
+      window.showToast && window.showToast(r.local ? "已存入本机知识库 ✶" : "已存入数据后端知识库 ✶");
+      refreshKB();
+    });
+  });
+
+  /* ---------- 四角拖拽 ---------- */
+  var wrap = document.getElementById("calibWrap");
+  function positionCorners() {
+    document.querySelectorAll(".corner").forEach(function (h) {
+      var c = corners[parseInt(h.dataset.c, 10)];
+      h.style.left = (c.x * 100) + "%"; h.style.top = (c.y * 100) + "%";
+    });
+  }
+  document.querySelectorAll(".corner").forEach(function (h) {
+    h.addEventListener("pointerdown", function (e) {
+      e.preventDefault(); h.setPointerCapture(e.pointerId);
+      var idx = parseInt(h.dataset.c, 10);
+      function move(ev) {
+        var rect = wrap.getBoundingClientRect();
+        var x = Math.min(0.98, Math.max(0.02, (ev.clientX - rect.left) / rect.width));
+        var y = Math.min(0.98, Math.max(0.02, (ev.clientY - rect.top) / rect.height));
+        corners[idx] = { x: x, y: y };
+        h.style.left = (x * 100) + "%"; h.style.top = (y * 100) + "%";
+        warpDirty = true;
+      }
+      function up(ev) { h.releasePointerCapture(e.pointerId); h.removeEventListener("pointermove", move); h.removeEventListener("pointerup", up); decompose(); }
+      h.addEventListener("pointermove", move);
+      h.addEventListener("pointerup", up);
+    });
+  });
+  positionCorners();
+
+  setThumb(currentImg.toDataURL("image/png"));
+  decompose();
+  refreshKB();
+})();
+</script>
+</body>
+</html>

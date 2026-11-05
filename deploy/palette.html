@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>色板 · 像素豆 PixelBean</title>
+  <meta name="description" content="像素豆官方 12 色拼豆色板与配色参考，含色号、HEX 与相近色。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="12 色官方色板 · 像素豆 PixelBean">
+  <meta property="og:description" content="像素豆官方 12 色拼豆色板与配色参考，含色号、HEX 与相近色。">
+  <meta property="og:url" content="https://pixelbean.example.com/palette.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="12 色官方色板 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="像素豆官方 12 色拼豆色板与配色参考，含色号、HEX 与相近色。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/palette.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html" class="active">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">色板</div>
+    <div class="sec-title">160+ 种拼豆色，精准匹配</div>
+    <div class="sec-sub">点任意色块即可复制色号。下面是常用 12 色，转换器会自动在整块色板里找最近色。</div>
+  </div>
+
+  <div class="palette-toolbar">
+    <input type="text" id="search" class="search-box" placeholder="搜索颜色名，如「红」「绿」…">
+  </div>
+
+  <section class="palette-grid" id="paletteGrid"></section>
+
+  <section class="card estimator">
+    <h3>上传图片，估算用豆量</h3>
+    <div class="sub">选一张图，看看拼成豆画需要每种颜色多少颗（基于 12 色示例板匹配）。</div>
+    <div class="controls">
+      <div class="row">
+        <label>图片</label>
+        <button class="btn btn-primary" id="estUpload">上传图片</button>
+        <button class="btn btn-ghost" id="estSample">用示例图</button>
+        <input type="file" id="estFile" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>规格</label>
+        <div class="seg" id="estSeg">
+          <button data-size="15">15×15</button>
+          <button data-size="21">21×21</button>
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+        </div>
+      </div>
+    </div>
+    <div class="bars" id="bars">
+      <div class="demo-hint">先上传一张图片，或点「用示例图」查看效果。</div>
+    </div>
+  </section>
+
+  <div class="page-foot-note">完整色板含更多过渡色与荧光色。注册后可按真实库存色号生成采购清单。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="templates.html">模板库</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  var grid = document.getElementById("paletteGrid");
+  var swatches = [];
+
+  PixelBean.PALETTE.forEach(function (p) {
+    var el = document.createElement("div");
+    el.className = "swatch";
+    el.dataset.name = p.name;
+    el.innerHTML =
+      '<div class="block" style="background:' + p.hex + '"></div>' +
+      '<div class="nm">' + p.name + '</div>' +
+      '<div class="cd">' + p.hex.toUpperCase() + '</div>';
+    el.addEventListener("click", function () { window.copyText(p.hex.toUpperCase()); });
+    grid.appendChild(el);
+    swatches.push(el);
+  });
+
+  document.getElementById("search").addEventListener("input", function (e) {
+    var q = e.target.value.trim();
+    swatches.forEach(function (el) {
+      el.style.display = (!q || el.dataset.name.indexOf(q) >= 0) ? "" : "none";
+    });
+  });
+
+  /* 用豆量估算 */
+  var estSize = 29;
+  var estImg = PixelBean.makeSample();
+  function renderBars() {
+    var counts = PixelBean.estimateCounts(estImg, estSize);
+    var max = Math.max.apply(null, counts.map(function (c) { return c.count; })) || 1;
+    var box = document.getElementById("bars");
+    box.innerHTML = "";
+    counts.forEach(function (c) {
+      var row = document.createElement("div");
+      row.className = "bar-row";
+      var pct = Math.round(c.count / max * 100);
+      row.innerHTML =
+        '<span class="nm">' + c.name + '</span>' +
+        '<span class="bar-track"><span class="bar-fill" style="width:' + pct + '%;background:' + c.hex + '"></span></span>' +
+        '<span class="ct">×' + c.count + '</span>';
+      box.appendChild(row);
+    });
+  }
+  document.getElementById("estUpload").addEventListener("click", function () {
+    document.getElementById("estFile").click();
+  });
+  document.getElementById("estFile").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { estImg = im; renderBars(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("estSample").addEventListener("click", function () {
+    estImg = PixelBean.makeSample();
+    renderBars();
+  });
+  document.querySelectorAll("#estSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#estSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      estSize = parseInt(b.dataset.size, 10);
+      renderBars();
+    });
+  });
+})();
+</script>
+</body>
+</html>

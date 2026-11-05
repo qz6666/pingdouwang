@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>多规格图纸 · 像素豆 PixelBean</title>
+  <meta name="description" content="清晰网格图纸，逐格标注每颗珠的颜色与位置，打印即拼。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="拼豆图纸 · 像素豆 PixelBean">
+  <meta property="og:description" content="清晰网格图纸，逐格标注每颗珠的颜色与位置，打印即拼。">
+  <meta property="og:url" content="https://pixelbean.example.com/blueprint.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="拼豆图纸 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="清晰网格图纸，逐格标注每颗珠的颜色与位置，打印即拼。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/blueprint.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.bp-info{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px;}
+.bp-info .cell{background:var(--cream);border:1px solid var(--border);border-radius:12px;padding:12px 14px;}
+.bp-info .k{font-size:12px;color:var(--gray);font-weight:600;}
+.bp-info .v{font-size:18px;font-weight:700;color:var(--ink);margin-top:3px;font-family:'Outfit',sans-serif;}
+.bp-info .v.full{grid-column:1 / -1;font-size:15px;font-weight:600;color:var(--green);}
+#bpCanvas{width:100%;max-width:480px;aspect-ratio:1/1;background:#fff;border:1px solid var(--border);border-radius:14px;image-rendering:pixelated;}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html#features" class="active">功能</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">功能特性</div>
+    <div class="sec-title">多规格图纸</div>
+    <div class="sec-sub">从 29×29 到 80×80 多种尺寸，自动输出带坐标网格的拼豆图纸。手机壳、相框、挂画都能适配，照着网格拼不出错。</div>
+  </div>
+
+  <section class="card color-tool">
+    <div class="ct-controls">
+      <div class="row">
+        <label>① 选择图片</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="uploadBtn">上传图片</button>
+          <button class="btn btn-ghost" id="sampleBtn">用示例图</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>② 拼豆规格</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+          <button data-size="57">57×57</button>
+          <button data-size="80">80×80</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>③ 导出</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-yellow" id="dlBtn">下载图纸 PNG</button>
+          <button class="btn btn-ghost" id="toPrint">去一键打印 ›</button>
+        </div>
+      </div>
+      <div class="bp-info">
+        <div class="cell"><div class="k">用豆总量</div><div class="v" id="infoTotal">—</div></div>
+        <div class="cell"><div class="k">成品尺寸</div><div class="v" id="infoSize">—</div></div>
+        <div class="cell full"><div class="k">适用场景</div><div class="v" id="infoUse">—</div></div>
+      </div>
+    </div>
+
+    <div class="ct-preview">
+      <div class="preview-label">拼豆图纸（含坐标网格）</div>
+      <canvas id="bpCanvas" width="480" height="480"></canvas>
+      <div class="demo-hint">每颗拼豆约 5mm，图纸按等比缩放绘制。坐标（A/B/C… 与 1/2/3…）帮你快速定位每一颗。</div>
+    </div>
+  </section>
+
+  <div class="page-foot-note">这只是「功能特性 · 多规格图纸」的实时演示。其余功能（智能取色、色卡清单、模板库、成品预览、一键打印）也可在「怎么用」与注册后体验。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="index.html#features">功能特性</a>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script>
+(function () {
+  "use strict";
+  var canvas = document.getElementById("bpCanvas");
+  var size = 29;
+  var currentImg = PixelBean.makeSample();
+
+  function fitUse(s) {
+    if (s <= 29) return "钥匙扣 / 冰箱贴 / 小挂件";
+    if (s <= 40) return "手机壳 / 相框 / 杯垫";
+    if (s <= 57) return "抱枕 / 中幅挂画 / 门牌";
+    return "大幅挂画 / 墙面装饰";
+  }
+  function updateInfo() {
+    document.getElementById("infoTotal").textContent = (size * size).toLocaleString() + " 颗";
+    document.getElementById("infoSize").textContent = (size * 0.5).toFixed(1) + " × " + (size * 0.5).toFixed(1) + " cm";
+    document.getElementById("infoUse").textContent = fitUse(size);
+  }
+  function render() {
+    PixelBean.renderBlueprint(canvas, currentImg, size, 30);
+    updateInfo();
+  }
+
+  document.getElementById("uploadBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+  });
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { currentImg = im; render(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("sampleBtn").addEventListener("click", function () {
+    currentImg = PixelBean.makeSample(); render();
+  });
+  document.querySelectorAll("#sizeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#sizeSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      size = parseInt(b.dataset.size, 10);
+      render();
+    });
+  });
+  document.getElementById("dlBtn").addEventListener("click", function () {
+    var a = document.createElement("a");
+    a.download = "pixelbean-图纸-" + size + "x" + size + ".png";
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+  });
+  document.getElementById("toPrint").addEventListener("click", function () {
+    window.location.href = "print.html";
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

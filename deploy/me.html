@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的作品 · 像素豆 PixelBean</title>
+  <meta name="description" content="登录查看与管理你保存的拼豆作品与图纸，随时下载或继续编辑。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="我的作品 · 像素豆 PixelBean">
+  <meta property="og:description" content="登录查看与管理你保存的拼豆作品与图纸，随时下载或继续编辑。">
+  <meta property="og:url" content="https://pixelbean.example.com/me.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="我的作品 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="登录查看与管理你保存的拼豆作品与图纸，随时下载或继续编辑。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/me.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.me-main{max-width:1180px;margin:0 auto;padding:32px 24px 80px;}
+.profile-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px 24px;box-shadow:0 8px 22px rgba(33,25,18,.05);margin-bottom:24px;}
+.profile-bar .who{display:flex;align-items:center;gap:14px;}
+.profile-bar .avatar{width:52px;height:52px;border-radius:14px;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex:none;}
+.profile-bar .uname{font-size:18px;font-weight:800;}
+.profile-bar .usub{font-size:13px;color:var(--gray);margin-top:2px;}
+.profile-bar .right{display:flex;align-items:center;gap:12px;}
+.btn-ghost{border:1px solid var(--border);background:#fff;border-radius:11px;padding:9px 16px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--ink);}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);}
+
+.me-title{font-size:26px;font-weight:900;margin-bottom:4px;}
+.me-sub{font-size:14px;color:var(--gray);margin-bottom:20px;}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;}
+.card{position:relative;background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 6px 18px rgba(33,25,18,.05);}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(33,25,18,.1);}
+.card .thumb-wrap{aspect-ratio:1/1;background:var(--cream);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.card .thumb-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+.card .thumb-ph{color:var(--lightgray);font-size:13px;}
+.card .body{padding:12px 14px 14px;}
+.card .name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card .badge{display:inline-block;margin-top:6px;font-size:12px;font-weight:600;color:var(--orange);background:var(--cream);border-radius:999px;padding:2px 10px;}
+.card .meta{margin-top:8px;font-size:12px;color:var(--gray);display:flex;gap:10px;}
+.card .meta .views::before{content:"👁 ";}
+.card .del{position:absolute;top:8px;right:8px;border:none;background:rgba(33,25,18,.6);color:#fff;border-radius:8px;width:30px;height:30px;font-size:15px;cursor:pointer;opacity:0;transition:opacity .15s;}
+.card:hover .del{opacity:1;}
+.card .del:hover{background:var(--red);}
+
+.empty{padding:60px;text-align:center;color:var(--lightgray);}
+.empty a{color:var(--orange);font-weight:700;text-decoration:none;}
+
+/* 未登录面板 */
+.gate{max-width:440px;margin:80px auto;text-align:center;background:#fff;border:1px solid var(--border);border-radius:20px;padding:44px 32px;box-shadow:0 12px 30px rgba(33,25,18,.06);}
+.gate .icon{font-size:46px;}
+.gate h2{font-size:22px;font-weight:800;margin:14px 0 8px;}
+.gate p{color:var(--gray);font-size:14px;margin-bottom:22px;}
+.gate .btn-primary{display:inline-block;background:var(--orange);color:#fff;border-radius:12px;padding:12px 28px;font-weight:700;text-decoration:none;}
+
+.modal-mask{position:fixed;inset:0;background:rgba(33,25,18,.55);display:none;align-items:center;justify-content:center;padding:20px;z-index:50;}
+.modal-mask.show{display:flex;}
+.modal{background:#fff;border-radius:18px;max-width:680px;width:100%;max-height:90vh;overflow:auto;box-shadow:0 24px 60px rgba(0,0,0,.3);}
+.modal .m-img{width:100%;aspect-ratio:1/1;background:var(--cream);display:flex;align-items:center;justify-content:center;}
+.modal .m-img img{width:100%;height:100%;object-fit:contain;}
+.modal .m-body{padding:22px 24px 26px;}
+.modal .m-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+.modal .m-name{font-size:22px;font-weight:800;}
+.modal .m-close{border:none;background:var(--cream);width:34px;height:34px;border-radius:10px;font-size:18px;cursor:pointer;flex:none;}
+.modal .m-tags{display:flex;gap:8px;margin:10px 0 16px;flex-wrap:wrap;font-size:12px;color:var(--gray);}
+.modal .m-tags .badge{color:var(--orange);background:var(--cream);border-radius:999px;padding:3px 10px;font-weight:600;}
+.modal .m-sec-title{font-size:13px;font-weight:700;color:var(--gray);margin:16px 0 10px;}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;}
+.swatch{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--border);border-radius:9px;padding:5px 9px;font-size:12px;}
+.swatch .dot{width:18px;height:18px;border-radius:5px;border:1px solid rgba(0,0,0,.1);}
+.m-cta{display:inline-block;margin-top:20px;background:var(--orange);color:#fff;border-radius:12px;padding:11px 20px;font-weight:700;text-decoration:none;}
+@media (max-width:640px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;}
+  .me-title{font-size:22px;}
+}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="gallery.html">展示库</a>
+      <a href="me.html" style="color:var(--orange);font-weight:700;">我的作品</a>
+    </nav>
+    <a class="site-cta" href="register.html">免费生成</a>
+  </div>
+</header>
+
+<main class="me-main" id="main" style="display:none;">
+  <div class="profile-bar">
+    <div class="who">
+      <div class="avatar" id="avatar">U</div>
+      <div>
+        <div class="uname" id="userName">—</div>
+        <div class="usub" id="userSub">我的创意作品集中地</div>
+      </div>
+    </div>
+    <div class="right">
+      <button class="btn-ghost" id="logoutBtn">退出登录</button>
+    </div>
+  </div>
+
+  <div class="me-title">我的作品</div>
+  <div class="me-sub" id="meSub">这里收藏了你生成并保存的豆画成品。</div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none;">还没有作品，去 <a href="decompose.html">免费生成</a> 做一个吧 ✦</div>
+</main>
+
+<!-- 未登录 -->
+<div class="gate" id="gate" style="display:none;">
+  <div class="icon">🔐</div>
+  <h2>请先登录</h2>
+  <p>登录后即可查看和管理你保存的豆画作品。</p>
+  <a class="btn-primary" href="register.html">去登录 / 注册</a>
+</div>
+
+<!-- 详情弹层 -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <div class="m-img" id="mImg"></div>
+    <div class="m-body">
+      <div class="m-head">
+        <div class="m-name" id="mName"></div>
+        <button class="m-close" id="mClose">×</button>
+      </div>
+      <div class="m-tags" id="mTags"></div>
+      <div class="m-sec-title">配色方案（共 <span id="mBeads">0</span> 颗豆）</div>
+      <div class="swatches" id="mSwatches"></div>
+      <a class="m-cta" href="decompose.html">用同类方案生成 →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});}
+function fmtTs(ts){if(!ts)return"";var d=new Date(ts);var p=function(n){return(n<10?"0":"")+n;};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());}
+function maskPhone(p){p=(p||"").trim();if(p.length<7)return p;return p.slice(0,3)+"****"+p.slice(-4);}
+function token(){return localStorage.getItem("pb_token");}
+function authHeaders(extra){var h=Object.assign({"Content-Type":"application/json"},extra||{});var t=token();if(t)h["Authorization"]="Bearer "+t;return h;}
+function thumbHTML(thumb){if(thumb&&thumb.indexOf("data:image")===0)return"<img src='"+esc(thumb)+"' alt=''>";return"<div class='thumb-ph'>无缩略图</div>";}
+
+var state={page:1,size:24,items:[],pages:1,loading:false};
+
+/* 鉴权守卫：无 token 直接显示登录面板 */
+if(!token()){
+  document.getElementById("gate").style.display="block";
+}else{
+  document.getElementById("main").style.display="block";
+  boot();
+}
+
+function boot(){
+  var phone=localStorage.getItem("pb_phone")||"";
+  document.getElementById("userName").textContent=maskPhone(phone);
+  document.getElementById("userSub").textContent=(phone?maskPhone(phone):"我")+" 的创意作品集中地";
+  var av=document.getElementById("avatar");
+  av.textContent=(phone?phone.slice(0,1):"U");
+  load(true);
+}
+
+document.getElementById("logoutBtn").onclick=function(){
+  localStorage.removeItem("pb_token");
+  localStorage.removeItem("pb_phone");
+  location.href="index.html";
+};
+
+function load(reset){
+  if(state.loading)return;
+  if(reset){state.page=1;state.items=[];}
+  state.loading=true;
+  var url="/api/my/works?page="+state.page+"&size="+state.size;
+  fetch(url,{headers:authHeaders()}).then(function(r){
+    if(r.status===401){document.getElementById("main").style.display="none";document.getElementById("gate").style.display="block";throw new Error("unauth");}
+    return r.json();
+  }).then(function(d){
+    state.pages=d.pages||1;
+    if(reset)state.items=d.items;else state.items=state.items.concat(d.items);
+    render(d.total);
+  }).catch(function(e){
+    if(e.message!=="unauth"){document.getElementById("empty").style.display="block";document.getElementById("empty").textContent="加载失败，请确认后端服务已启动。";}
+  }).then(function(){state.loading=false;});
+}
+
+function render(total){
+  var grid=document.getElementById("grid");
+  document.getElementById("meSub").textContent="共 "+ (total||0) +" 件作品";
+  if(!state.items.length){
+    grid.innerHTML="";
+    document.getElementById("empty").style.display="block";
+    return;
+  }
+  document.getElementById("empty").style.display="none";
+  grid.innerHTML=state.items.map(function(it){
+    var cnt=(it.scheme&&it.scheme.length)||(it.colors&&it.colors.length)||0;
+    return"<div class='card' data-id='"+esc(it.id)+"'>"+
+      "<button class='del' data-id='"+esc(it.id)+"' title='删除'>🗑</button>"+
+      "<div class='thumb-wrap'>"+thumbHTML(it.thumb)+"</div>"+
+      "<div class='body'>"+
+        "<div class='name'>"+esc(it.source||"未命名")+"</div>"+
+        (it.subject?"<span class='badge'>"+esc(it.subject)+"</span>":"")+
+        "<div class='meta'><span>"+(it.size||"")+"×"+(it.size||"")+"</span><span>"+cnt+" 色</span><span class='views'>"+(it.views||0)+"</span></div>"+
+      "</div></div>";
+  }).join("");
+  grid.querySelectorAll(".card").forEach(function(c){
+    c.onclick=function(e){ if(e.target.classList.contains("del"))return; openDetail(c.getAttribute("data-id")); };
+  });
+  grid.querySelectorAll(".del").forEach(function(b){
+    b.onclick=function(e){
+      e.stopPropagation();
+      var id=b.getAttribute("data-id");
+      if(!confirm("确定删除这件作品吗？删除后不可恢复。"))return;
+      fetch("/api/my/works/"+encodeURIComponent(id),{method:"DELETE",headers:authHeaders()}).then(function(r){return r.json();}).then(function(d){
+        if(d.ok){ state.items=state.items.filter(function(x){return x.id!==id;}); render(state.items.length); }
+        else alert("删除失败："+(d.error||""));
+      }).catch(function(){alert("删除失败，请重试");});
+    };
+  });
+}
+
+function openDetail(id){
+  fetch("/api/gallery/"+encodeURIComponent(id)).then(function(r){return r.json();}).then(function(d){
+    if(!d.ok)return;
+    var it=d.item;
+    document.getElementById("mImg").innerHTML=thumbHTML(it.thumb);
+    document.getElementById("mName").textContent=it.source||"未命名作品";
+    var tags="";
+    if(it.subject)tags+="<span class='badge'>"+esc(it.subject)+"</span>";
+    tags+="<span>尺寸 "+(it.size||"")+"×"+(it.size||"")+"</span>";
+    tags+="<span>浏览 "+(it.views||0)+"</span>";
+    tags+="<span>上传 "+fmtTs(it.ts)+"</span>";
+    document.getElementById("mTags").innerHTML=tags;
+    var scheme=(it.scheme&&it.scheme.length)?it.scheme:(it.colors||[]).map(function(c){return{color:c,count:0};});
+    var totalBeads=0;
+    var sw=scheme.map(function(s){var cnt=s.count||0;totalBeads+=cnt;return"<div class='swatch'><span class='dot' style='background:"+esc(s.color)+"'></span>"+esc(s.color)+(cnt?" ×"+cnt:"")+"</div>";}).join("");
+    document.getElementById("mBeads").textContent=totalBeads||scheme.length;
+    document.getElementById("mSwatches").innerHTML=sw;
+    document.getElementById("modalMask").classList.add("show");
+  });
+}
+function closeModal(){document.getElementById("modalMask").classList.remove("show");}
+document.getElementById("mClose").onclick=closeModal;
+document.getElementById("modalMask").onclick=function(e){if(e.target===this)closeModal();};
+</script>
+</body>
+</html>

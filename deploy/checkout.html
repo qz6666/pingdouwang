@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>升级标准版 · 像素豆 PixelBean</title>
+  <meta name="description" content="开通拼豆生成器会员，解锁无限图纸与更高分辨率。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="订阅 · 像素豆 PixelBean">
+  <meta property="og:description" content="开通拼豆生成器会员，解锁无限图纸与更高分辨率。">
+  <meta property="og:url" content="https://pixelbean.example.com/checkout.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="订阅 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="开通拼豆生成器会员，解锁无限图纸与更高分辨率。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/checkout.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.checkout-wrap{max-width:920px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:1fr 340px;gap:28px;align-items:start;}
+.checkout-form,.checkout-summary{background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 10px 30px rgba(33,25,18,.06);padding:32px;}
+.checkout-form h2{font-size:22px;font-weight:700;margin-bottom:6px;}
+.checkout-form .hint{font-size:14px;color:var(--gray);margin-bottom:24px;}
+.form-row{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.form-row label{font-size:13px;font-weight:600;color:var(--gray);}
+.form-row input, .form-row select{
+  border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:15px;font-family:inherit;outline:none;background:#fff;}
+.form-row input:focus, .form-row select:focus{border-color:var(--orange);}
+.form-row .note{font-size:12px;color:var(--lightgray);}
+.payment-options{display:flex;flex-direction:column;gap:10px;margin-bottom:6px;}
+.pay-option{display:flex;align-items:center;gap:12px;border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s;}
+.pay-option:hover{border-color:var(--orange);background:rgba(242,100,62,.04);}
+.pay-option input{width:18px;height:18px;accent-color:var(--orange);cursor:pointer;}
+.pay-option span{font-size:15px;font-weight:600;}
+.pay-option small{margin-left:auto;font-size:12px;color:var(--lightgray);}
+.summary-title{font-size:18px;font-weight:700;margin-bottom:18px;}
+.summary-plan{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.summary-plan .badge{background:var(--orange);color:#fff;border-radius:999px;font-size:12px;font-weight:700;padding:4px 12px;}
+.summary-plan .name{font-size:16px;font-weight:600;}
+.summary-price{font-size:32px;font-weight:800;margin-bottom:4px;}
+.summary-period{color:var(--gray);font-size:14px;margin-bottom:20px;}
+.summary-item{display:flex;justify-content:space-between;font-size:14px;padding:8px 0;border-bottom:1px dashed var(--border);}
+.summary-item.total{font-size:18px;font-weight:700;border-bottom:none;padding-top:16px;}
+.submit-btn{width:100%;margin-top:24px;}
+.secure-note{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--lightgray);margin-top:14px;}
+.secure-note svg{width:16px;height:16px;flex:none;}
+.success-box{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;padding:40px 24px;}
+.success-box .icon{width:64px;height:64px;background:var(--green);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;}
+.success-box h2{font-size:24px;font-weight:700;}
+.success-box p{color:var(--gray);line-height:1.6;}
+@media (max-width:880px){
+  .checkout-wrap{grid-template-columns:1fr;}
+  .checkout-summary{order:-1;}
+}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">订阅</div>
+    <div class="sec-title">升级标准版</div>
+    <div class="sec-sub">解锁无限图纸、全尺寸与无水印导出，按需按月或按年付费。</div>
+  </div>
+
+  <div class="checkout-wrap">
+    <div class="checkout-form" id="formBox">
+      <h2>填写订阅信息</h2>
+      <div class="hint">本页为演示收银台，提交后不会扣款。</div>
+
+      <form id="checkoutForm">
+        <div class="form-row">
+          <label for="email">联系邮箱</label>
+          <input type="email" id="email" placeholder="you@example.com" required>
+        </div>
+
+        <div class="form-row">
+          <label for="phone">手机号</label>
+          <input type="tel" id="phone" placeholder="138 0000 0000" required pattern="1[3-9]\d{9}">
+        </div>
+
+        <div class="form-row">
+          <label>账单周期</label>
+          <div class="toggle" id="billing" style="margin:0 0 10px 0;">
+            <button type="button" data-mode="month" class="on">按月 ¥19/月</button>
+            <button type="button" data-mode="year">按年 ¥190/年<span class="save-tag">省 2 个月</span></button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label>支付方式</label>
+          <div class="payment-options">
+            <label class="pay-option">
+              <input type="radio" name="pay" value="wechat" checked>
+              <span>微信支付</span>
+              <small>推荐</small>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="pay" value="alipay">
+              <span>支付宝</span>
+            </label>
+            <label class="pay-option">
+              <input type="radio" name="pay" value="card">
+              <span>信用卡 / 借记卡</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-row" id="cardRow" style="display:none;">
+          <label for="card">卡号（演示）</label>
+          <input type="text" id="card" placeholder="0000 0000 0000 0000" maxlength="19">
+          <div class="note">仅作演示，无需填写真实卡号。</div>
+        </div>
+
+        <div class="secure-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          演示环境 · 数据仅保存在本地浏览器
+        </div>
+
+        <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">确认支付</button>
+      </form>
+    </div>
+
+    <div class="success-box" id="successBox">
+      <div class="icon">✓</div>
+      <h2>订阅成功</h2>
+      <p>你已开通 <strong>标准版</strong>，可在本地继续体验完整功能。<br>真实支付需接入支付网关。</p>
+      <a class="btn btn-primary" href="index.html">返回首页</a>
+    </div>
+
+    <div class="checkout-summary">
+      <div class="summary-title">订单摘要</div>
+      <div class="summary-plan"><span class="badge">推荐</span><span class="name">标准版</span></div>
+      <div class="summary-price" id="price">¥19</div>
+      <div class="summary-period" id="period">每月</div>
+      <div class="summary-item"><span>功能</span><span>无限图纸 · 80×80</span></div>
+      <div class="summary-item"><span>导出</span><span>无水印 · 色卡</span></div>
+      <div class="summary-item total"><span>合计</span><span id="total">¥19</span></div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="templates.html">模板库</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+<script>
+(function(){
+  const billing = document.getElementById('billing');
+  const priceEl = document.getElementById('price');
+  const totalEl = document.getElementById('total');
+  const periodEl = document.getElementById('period');
+  const cardRow = document.getElementById('cardRow');
+  const payRadios = document.querySelectorAll('input[name="pay"]');
+  let mode = 'month';
+
+  function setMode(m){
+    mode = m;
+    billing.querySelectorAll('button').forEach(function(b){ b.classList.remove('on'); });
+    billing.querySelector('[data-mode="' + m + '"]').classList.add('on');
+    if(m === 'year'){
+      priceEl.textContent = '¥190';
+      totalEl.textContent = '¥190';
+      periodEl.textContent = '每年（省 2 个月）';
+    }else{
+      priceEl.textContent = '¥19';
+      totalEl.textContent = '¥19';
+      periodEl.textContent = '每月';
+    }
+  }
+
+  billing.querySelectorAll('button').forEach(function(b){
+    b.addEventListener('click', function(){ setMode(b.dataset.mode); });
+  });
+
+  payRadios.forEach(function(r){
+    r.addEventListener('change', function(){
+      cardRow.style.display = r.value === 'card' ? 'flex' : 'none';
+    });
+  });
+
+  document.getElementById('checkoutForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = '处理中…';
+    btn.disabled = true;
+    setTimeout(function(){
+      const order = {
+        plan: 'standard', cycle: mode, price: mode === 'year' ? 190 : 19,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        pay: document.querySelector('input[name="pay"]:checked').value,
+        time: new Date().toISOString()
+      };
+      localStorage.setItem('pb_order', JSON.stringify(order));
+      document.getElementById('formBox').style.display = 'none';
+      document.getElementById('successBox').style.display = 'flex';
+    }, 900);
+  });
+})();
+</script>
+</body>
+</html>

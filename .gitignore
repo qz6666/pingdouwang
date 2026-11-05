@@ -1,0 +1,25 @@
+# ===== PixelBean 部署仓库 .gitignore（Render 专用）=====
+# 运行时依赖由 Render 执行 npm install 生成
+node_modules/
+
+# SQLite 运行时产生的临时文件（db 本体 pixelbean.db 需要提交）
+*.db-wal
+*.db-shm
+server/data/backups/
+*.bak
+*.bak-*
+
+# 开发期脚本：含 Agnes API Key 与本地生图/灌库逻辑，运行时不依赖，禁止入库
+server/gen_ai_batch.js
+server/seed_ai_gallery.js
+server/seed_gallery.js
+server/seed_views.js
+server/ai_subjects.js
+server/monitor.js
+server/Dockerfile
+server/docker-compose.yml
+server/DEPLOY.md
+
+# 系统文件
+.DS_Store
+Thumbs.db

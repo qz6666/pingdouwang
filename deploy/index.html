@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>像素豆 PixelBean · 在线拼豆生成器</title>
+  <meta name="description" content="上传照片一键生成拼豆图纸：12 色官方色板、智能取色、立体预览、免费下载，新手也能拼出好看的作品。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="像素豆 PixelBean · 在线拼豆生成器">
+  <meta property="og:description" content="上传照片一键生成拼豆图纸：12 色官方色板、智能取色、立体预览、免费下载，新手也能拼出好看的作品。">
+  <meta property="og:url" content="https://pixelbean.example.com/index.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="像素豆 PixelBean · 在线拼豆生成器">
+  <meta name="twitter:description" content="上传照片一键生成拼豆图纸：12 色官方色板、智能取色、立体预览、免费下载，新手也能拼出好看的作品。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/index.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#F6F1E7;
+  --orange:#F2643E;
+  --orange-soft:rgba(242,100,62,.3);
+  --green:#1FA89A;
+  --yellow:#F4C041;
+  --ink:#241E18;
+  --gray:#6E655A;
+  --lightgray:#9F968F;
+  --border:#E8E0D2;
+  --white:#FFFFFF;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Noto Sans SC','Outfit',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  overflow-x:hidden;
+}
+.ardot-page{
+  width:1440px;
+  height:4052px;
+  transform-origin:top left;
+  position:relative;
+  background:var(--cream);
+}
+.eyebrow{font-family:'Outfit',sans-serif;font-weight:600;font-size:14px;color:var(--orange);letter-spacing:.04em;}
+.sec-title{font-size:38px;font-weight:700;color:var(--ink);line-height:1.25;}
+.sec-sub{font-size:17px;font-weight:400;color:var(--gray);line-height:1.6;}
+
+/* ---------- Header ---------- */
+.header{
+  position:absolute;top:0;left:0;width:1440px;height:72px;
+  background:var(--white);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;padding:0 64px;z-index:20;
+}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:34px;height:34px;}
+.brand-cn{font-size:22px;font-weight:700;color:var(--ink);}
+.brand-en{font-size:12px;font-weight:600;color:var(--orange);margin-top:6px;}
+.nav{display:flex;gap:34px;}
+.nav a{font-size:15px;font-weight:500;color:var(--gray);text-decoration:none;transition:color .2s;}
+.nav a:hover{color:var(--orange);}
+.header-cta{
+  background:var(--orange);color:#fff;border-radius:999px;
+  padding:11px 22px;font-family:'Outfit',sans-serif;font-weight:600;font-size:15px;
+  border:none;cursor:pointer;transition:transform .15s,box-shadow .2s;
+  box-shadow:0 8px 20px rgba(242,100,62,.3);
+}
+.header-cta:hover{transform:translateY(-1px);}
+/* 登录态（替换「免费生成」） */
+.user-box{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px 6px 5px 12px;box-shadow:0 6px 16px rgba(33,25,18,.08);}
+.user-avatar{width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;letter-spacing:.5px;}
+.user-out{border:none;background:var(--cream);color:var(--gray);font-size:13px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;font-family:inherit;transition:all .15s;}
+.user-out:hover{background:var(--orange);color:#fff;}
+
+/* ---------- Hero ---------- */
+.hero{
+  position:absolute;top:72px;left:0;width:1440px;height:650px;
+  background:var(--cream);display:flex;align-items:center;justify-content:space-between;
+  padding:0 120px;gap:64px;
+}
+.hero-left{width:580px;display:flex;flex-direction:column;gap:28px;align-items:flex-start;}
+.badge{
+  display:inline-flex;align-items:center;gap:8px;background:#fff;
+  border:1px solid var(--orange-soft);border-radius:999px;padding:7px 14px 7px 12px;
+}
+.badge-dot{width:8px;height:8px;border-radius:4px;background:var(--orange);}
+.badge-text{font-size:13px;font-weight:500;color:#C2410F;}
+.hero-h1{font-size:56px;font-weight:700;line-height:1.15;color:var(--ink);}
+.hero-sub{font-size:18px;line-height:1.6;color:var(--gray);max-width:540px;}
+.hero-ctas{display:flex;gap:16px;align-items:center;}
+.btn-primary{
+  background:var(--orange);color:#fff;border-radius:999px;padding:0 28px;height:50px;
+  display:inline-flex;align-items:center;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;
+  border:none;cursor:pointer;box-shadow:0 10px 24px rgba(242,100,62,.3);transition:transform .15s;
+}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-secondary{
+  background:#fff;color:var(--ink);border:1px solid rgba(140,132,122,.45);border-radius:999px;
+  padding:0 28px;height:53px;display:inline-flex;align-items:center;font-size:16px;font-weight:500;
+  cursor:pointer;transition:border-color .2s;
+}
+.btn-secondary:hover{border-color:var(--orange);}
+.hero-trust{font-size:14px;color:var(--lightgray);}
+
+/* Hero Visual */
+.hero-visual{width:480px;display:flex;justify-content:center;}
+.bead-card{
+  width:440px;height:458px;background:#fff;border:1px solid var(--border);border-radius:20px;
+  box-shadow:0 18px 40px rgba(33,25,18,.12);padding:24px;position:relative;
+}
+.bead-card-title{font-size:15px;font-weight:700;color:var(--ink);}
+.bead-tag{
+  position:absolute;top:24px;right:24px;background:var(--cream);border:1px solid var(--border);
+  border-radius:6px;font-size:12px;font-weight:700;color:var(--gray);padding:2px 8px;
+}
+.bead-grid{
+  position:absolute;top:56px;left:24px;
+  display:grid;grid-template-columns:repeat(29,1fr);gap:2px;
+}
+.bead{width:9px;height:9px;border-radius:50%;}
+.bead.legend{visibility:hidden;}
+.bead-legend{position:absolute;left:24px;bottom:24px;display:flex;gap:0;align-items:center;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--gray);margin-right:24px;}
+.legend-swatch{width:16px;height:16px;border-radius:4px;}
+.float-badge{
+  position:absolute;right:24px;bottom:40px;background:#fff;border-radius:999px;
+  box-shadow:0 8px 20px rgba(33,25,18,.18);padding:8px 16px;display:inline-flex;align-items:center;gap:8px;
+  font-family:'Outfit',sans-serif;font-weight:600;font-size:13px;color:var(--ink);
+}
+.float-dot{width:8px;height:8px;border-radius:4px;background:var(--green);}
+
+/* ---------- Section shells ---------- */
+.section{position:absolute;left:0;width:1440px;display:flex;flex-direction:column;align-items:center;}
+.sec-head{width:720px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:48px;}
+.sec-head .sec-sub{width:600px;}
+.sec-more{font-size:14px;font-weight:600;color:var(--orange);text-decoration:none;cursor:pointer;transition:opacity .2s;}
+.sec-more:hover{opacity:.75;text-decoration:underline;}
+
+/* ---------- Features ---------- */
+.features{top:722px;height:792px;background:var(--cream);padding-top:96px;}
+.feat-rows{width:1200px;display:flex;flex-direction:column;gap:24px;}
+.feat-row{display:flex;gap:24px;}
+.feat-card{
+  flex:1;background:#fff;border:1px solid var(--border);border-radius:16px;padding:28px;
+  display:flex;flex-direction:column;gap:14px;min-height:203px;
+  color:inherit;text-decoration:none;transition:transform .15s,box-shadow .2s;
+}
+.feat-card:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(33,25,18,.1);}
+.feat-link{margin-top:2px;font-size:14px;font-weight:600;color:var(--orange);}
+.feat-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.feat-icon img{width:24px;height:24px;}
+.feat-title{font-size:19px;font-weight:700;color:var(--ink);}
+.feat-desc{font-size:15px;line-height:1.55;color:var(--gray);}
+
+/* ---------- HowItWorks ---------- */
+.how{top:1514px;height:584px;background:var(--cream);padding-top:96px;}
+.steps-row{width:1200px;display:flex;gap:24px;}
+.step-card{
+  flex:1;background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;
+  display:flex;flex-direction:column;gap:16px;min-height:222px;
+}
+.step-num{font-family:'Outfit',sans-serif;font-weight:800;font-size:40px;}
+.step-title{font-size:20px;font-weight:700;color:var(--ink);}
+.step-desc{font-size:15px;line-height:1.55;color:var(--gray);}
+
+/* ---------- Palette ---------- */
+.palette{top:2098px;height:692px;background:var(--cream);padding-top:96px;}
+.palette-rows{width:1200px;display:flex;flex-direction:column;gap:20px;}
+.palette-row{display:flex;gap:16px;}
+.swatch{flex:1;display:flex;flex-direction:column;gap:8px;}
+.swatch-block{height:104px;border:1px solid var(--border);border-radius:14px;}
+.swatch-name{font-size:14px;font-weight:500;color:var(--ink);}
+.swatch-code{font-family:'Outfit',sans-serif;font-weight:500;font-size:12px;color:var(--lightgray);}
+
+/* ---------- Pricing ---------- */
+.pricing{top:2790px;height:710px;background:var(--cream);padding-top:96px;}
+.price-grid{width:1200px;display:flex;gap:24px;}
+.plan{
+  flex:1;background:#fff;border:1px solid var(--border);border-radius:16px;padding:32px;
+  display:flex;flex-direction:column;gap:18px;
+}
+.plan.pro{border:2px solid var(--orange);box-shadow:0 14px 32px rgba(242,100,62,.22);}
+.plan-name{font-size:15px;font-weight:500;color:var(--lightgray);}
+.plan.pro .plan-name{font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px;}
+.plan-badge{background:var(--orange);color:#fff;border-radius:999px;font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;padding:4px 12px;}
+.plan-price{display:flex;align-items:baseline;gap:4px;}
+.plan-amount{font-family:'Outfit',sans-serif;font-weight:800;font-size:40px;color:var(--ink);}
+.plan-per{font-size:15px;font-weight:500;color:var(--lightgray);}
+.plan-feats{display:flex;flex-direction:column;gap:10px;}
+.feat-line{display:flex;align-items:center;gap:8px;font-size:14px;color:#4A443E;}
+.feat-check{width:18px;height:18px;}
+.plan-btn{
+  margin-top:auto;align-self:flex-start;border-radius:999px;padding:0 24px;height:48px;
+  display:inline-flex;align-items:center;font-size:15px;font-weight:700;cursor:pointer;border:none;
+}
+.plan-btn.ghost{background:#fff;border:1px solid rgba(140,132,122,.45);color:var(--ink);}
+.plan-btn.solid{background:var(--orange);color:#fff;box-shadow:0 10px 24px rgba(242,100,62,.3);}
+
+/* ---------- CTA ---------- */
+.cta{
+  position:absolute;top:3500px;left:120px;width:1200px;height:209px;
+  background:var(--orange);border-radius:24px;box-shadow:0 18px 40px rgba(242,100,62,.3);
+  display:flex;align-items:center;justify-content:space-between;padding:0 80px;
+}
+.cta-title{font-size:32px;font-weight:700;color:#fff;}
+.cta-sub{font-size:16px;color:#FCEAEA;margin-top:12px;}
+.cta-btn{
+  background:#fff;color:var(--orange);border-radius:999px;padding:0 28px;height:50px;
+  display:inline-flex;align-items:center;font-family:'Outfit',sans-serif;font-weight:600;font-size:16px;
+  border:none;cursor:pointer;
+}
+
+/* ---------- Footer ---------- */
+.footer{
+  position:absolute;top:3709px;left:0;width:1440px;height:343px;background:var(--ink);
+  padding:64px 120px 0;display:flex;flex-direction:column;
+}
+.footer-top{display:flex;justify-content:space-between;gap:48px;width:1200px;}
+.footer-brand{width:300px;display:flex;flex-direction:column;gap:14px;}
+.footer-logo{display:flex;align-items:center;gap:10px;}
+.footer-mark{width:30px;height:30px;}
+.footer-name{font-size:18px;font-weight:700;color:#fff;margin-top:2px;}
+.footer-desc{font-size:14px;line-height:1.6;color:var(--lightgray);}
+.footer-cols{display:flex;gap:64px;}
+.footer-col{display:flex;flex-direction:column;gap:14px;}
+.col-head{font-size:14px;font-weight:700;color:#fff;}
+.col-link{font-size:14px;color:var(--lightgray);cursor:pointer;transition:color .2s;}
+.col-link:hover{color:#fff;}
+.footer-bottom{
+  width:1200px;margin-top:40px;padding-top:24px;border-top:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.footer-copy{font-size:13px;color:#8A8276;}
+.footer-social{display:flex;gap:16px;}
+.social{font-size:13px;font-weight:500;color:var(--lightgray);cursor:pointer;}
+.social:hover{color:#fff;}
+
+/* ---------- 按钮反馈（按下 / 聚焦 / 点击弹跳） ---------- */
+.header-cta, .btn-primary, .btn-secondary, .plan-btn, .cta-btn{
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .12s ease, box-shadow .2s ease, border-color .2s ease, filter .12s ease;
+}
+.header-cta:active, .btn-primary:active, .btn-secondary:active,
+.plan-btn:active, .cta-btn:active{
+  transform:translateY(1px) scale(.97);
+  filter:brightness(.96);
+}
+.header-cta:active, .btn-primary:active, .cta-btn:active{
+  box-shadow:0 4px 10px rgba(242,100,62,.28);
+}
+.btn-secondary:active, .plan-btn.ghost:active{
+  border-color:var(--orange);
+}
+.btn-primary.pop, .header-cta.pop, .cta-btn.pop, .plan-btn.pop, .btn-secondary.pop{
+  animation:btnPop .28s ease;
+}
+@keyframes btnPop{
+  0%{transform:scale(.97);}
+  55%{transform:scale(1.03);}
+  100%{transform:scale(1);}
+}
+.header-cta:focus-visible, .btn-primary:focus-visible, .btn-secondary:focus-visible,
+.plan-btn:focus-visible, .cta-btn:focus-visible{
+  outline:3px solid var(--orange-soft);
+  outline-offset:3px;
+}
+
+/* ---------- 跳转提示 Toast ---------- */
+.col-link, .social{text-decoration:none;}
+.toast{
+  position:fixed; left:50%; bottom:40px; transform:translateX(-50%) translateY(20px);
+  background:var(--ink); color:#fff; font-size:14px; font-weight:500;
+  padding:12px 22px; border-radius:999px; box-shadow:0 12px 30px rgba(33,25,18,.28);
+  opacity:0; pointer-events:none; transition:opacity .25s ease, transform .25s ease; z-index:100;
+  max-width:90vw; text-align:center;
+}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+</style>
+
+</head>
+<body>
+<div class="ardot-page" id="page">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <img class="logo-mark" src="assets/svg/3_5.svg" alt="像素豆">
+      <div>
+        <div class="brand-cn">像素豆</div>
+        <div class="brand-en">PixelBean</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="#features">功能</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="gallery.html">展示库</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="header-cta" data-go="register">免费生成</button>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="badge"><span class="badge-dot"></span><span class="badge-text">在线拼豆生成器 · 免费</span></div>
+      <h1 class="hero-h1">把任何画面，变成可拼的豆画</h1>
+      <p class="hero-sub">上传一张照片，像素豆自动取色、匹配拼豆色号，输出可打印的拼豆图纸与色卡清单。</p>
+      <div class="hero-ctas">
+        <button class="btn-primary" data-go="register">上传图片，开始生成 →</button>
+        <a class="btn-secondary" href="gallery.html">看示例作品 ›</a>
+      </div>
+      <p class="hero-trust">已有 12.4 万份图纸被拼出 · 无需注册</p>
+    </div>
+    <div class="hero-visual">
+      <div class="bead-card">
+        <div class="bead-card-title">图纸预览</div>
+        <div class="bead-tag">29×29</div>
+        <div class="bead-grid" id="beadGrid"></div>
+        <div class="bead-legend">
+          <div class="legend-item"><span class="legend-swatch" style="background:#E5484D"></span>主红 ×52</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#EC6A9C"></span>粉 ×15</div>
+          <div class="legend-item"><span class="legend-swatch" style="background:#C9434B"></span>深红 ×11</div>
+        </div>
+        <div class="float-badge"><span class="float-dot"></span>成品预览 ▸</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section features" id="features">
+    <div class="sec-head">
+      <div class="eyebrow">功能特性</div>
+      <div class="sec-title">从照片到图纸，功能一步到位</div>
+      <div class="sec-sub">不止是像素化。取色、配板、清单、打印，拼豆全流程都在这里完成。</div>
+    </div>
+    <div class="feat-rows">
+      <div class="feat-row">
+        <a class="feat-card" href="color.html">
+          <div class="feat-icon" style="background:var(--orange)"><img src="assets/svg/4_10.svg" alt=""></div>
+          <div class="feat-title">智能取色</div>
+          <div class="feat-desc">分析照片每个像素，自动匹配最接近的原厂拼豆色号，告别肉眼比对。</div>
+          <div class="feat-link">立即体验 →</div>
+        </a>
+        <a class="feat-card" href="blueprint.html">
+          <div class="feat-icon" style="background:var(--green)"><img src="assets/svg/4_17.svg" alt=""></div>
+          <div class="feat-title">多规格图纸</div>
+          <div class="feat-desc">支持 29×29 到 80×80 多种尺寸，手机壳、相框、挂画都能适配。</div>
+          <div class="feat-link">立即体验 →</div>
+        </a>
+        <a class="feat-card" href="colorcard.html">
+          <div class="feat-icon" style="background:var(--yellow)"><img src="assets/svg/4_26.svg" alt=""></div>
+          <div class="feat-title">色卡清单</div>
+          <div class="feat-desc">自动统计每种颜色的用量，生成购物清单，照着买不浪费。</div>
+          <div class="feat-link">立即体验 →</div>
+        </a>
+      </div>
+      <div class="feat-row">
+        <a class="feat-card" href="templates.html">
+          <div class="feat-icon" style="background:var(--green)"><img src="assets/svg/4_34.svg" alt=""></div>
+          <div class="feat-title">模板库</div>
+          <div class="feat-desc">内置 28 款现成模板，涵盖人物、动物、食物、自然、配饰、卡通，点开即用。</div>
+          <div class="feat-link">立即体验 →</div>
+        </a>
+        <a class="feat-card" href="preview.html">
+          <div class="feat-icon" style="background:var(--orange)"><img src="assets/svg/4_42.svg" alt=""></div>
+          <div class="feat-title">成品预览</div>
+          <div class="feat-desc">实时渲染拼好后的效果，先预览再动手，避免拼错返工。</div>
+          <div class="feat-link">立即体验 →</div>
+        </a>
+        <a class="feat-card" href="print.html">
+          <div class="feat-icon" style="background:var(--yellow)"><img src="assets/svg/4_49.svg" alt=""></div>
+          <div class="feat-title">一键打印</div>
+          <div class="feat-desc">生成 A4 可打印图纸，带坐标网格，照着拼不出错。</div>
+          <div class="feat-link">立即体验 →</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HowItWorks -->
+  <section class="section how" id="how">
+    <div class="sec-head">
+      <div class="eyebrow">怎么用</div>
+      <div class="sec-title">三步，把照片变成豆画</div>
+      <div class="sec-sub">不需要任何设计基础，手机电脑都能用。</div>
+      <a class="sec-more" href="how.html">查看完整「怎么用」与实时转换器 →</a>
+    </div>
+    <div class="steps-row">
+      <div class="step-card">
+        <div class="step-num" style="color:var(--orange)">01</div>
+        <div class="step-title">上传照片</div>
+        <div class="step-desc">拖入或选择一张图片，支持 JPG / PNG，手机相册直接导入。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num" style="color:var(--green)">02</div>
+        <div class="step-title">自动生成</div>
+        <div class="step-desc">调整尺寸与配色，一键生成拼豆图纸和色卡清单。</div>
+      </div>
+      <div class="step-card">
+        <div class="step-num" style="color:var(--yellow)">03</div>
+        <div class="step-title">拼 &amp; 打印</div>
+        <div class="step-desc">照屏幕预览拼好，或导出 A4 图纸，慢工出细活。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Palette -->
+  <section class="section palette" id="palette">
+    <div class="sec-head">
+      <div class="eyebrow">色板</div>
+      <div class="sec-title">160+ 种拼豆色，精准匹配</div>
+      <div class="sec-sub">从照片取色后，自动在色板里找最近的色号，下面是常用色示例。</div>
+      <a class="sec-more" href="palette.html">打开完整色板与用豆量估算 →</a>
+    </div>
+    <div class="palette-rows" id="paletteRows"></div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="section pricing" id="pricing">
+    <div class="sec-head">
+      <div class="eyebrow">价格</div>
+      <div class="sec-title">免费开始，按需升级</div>
+      <div class="sec-sub">个人玩完全免费，进阶功能按月订阅，随时取消。</div>
+      <a class="sec-more" href="pricing.html">查看完整价格与按年优惠 →</a>
+    </div>
+    <div class="price-grid">
+      <div class="plan">
+        <div class="plan-name">免费版</div>
+        <div class="plan-price"><span class="plan-amount">¥0</span><span class="plan-per">/月</span></div>
+        <div class="plan-feats">
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">每月 10 张图纸</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">最大 29×29 尺寸</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">带水印导出</div>
+        </div>
+        <a class="plan-btn ghost" href="register.html">免费开始</a>
+      </div>
+      <div class="plan pro">
+        <div class="plan-name">标准版<span class="plan-badge">推荐</span></div>
+        <div class="plan-price"><span class="plan-amount">¥19</span><span class="plan-per">/月</span></div>
+        <div class="plan-feats">
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">无限图纸生成</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">全尺寸最大 80×80</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">无水印 · 色卡导出</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">优先生成队列</div>
+        </div>
+        <a class="plan-btn solid" href="checkout.html">升级标准版</a>
+      </div>
+      <div class="plan">
+        <div class="plan-name">工作室版</div>
+        <div class="plan-price"><span class="plan-amount">¥49</span><span class="plan-per">/月</span></div>
+        <div class="plan-feats">
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">含标准版全部功能</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">团队 5 人协作</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">商用授权</div>
+          <div class="feat-line"><img class="feat-check" src="assets/svg/6_129.svg" alt="">开放 API 接入</div>
+        </div>
+        <a class="plan-btn ghost" href="contact.html">联系我们</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div>
+      <div class="cta-title">准备好拼出你的第一幅豆画？</div>
+      <div class="cta-sub">上传照片，30 秒出图纸。无需注册，免费开始。</div>
+    </div>
+    <button class="cta-btn" data-go="register">免费生成 →</button>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img class="footer-mark" src="assets/svg/6_214.svg" alt="像素豆">
+          <span class="footer-name">像素豆 PixelBean</span>
+        </div>
+        <div class="footer-desc">把任何画面变成可拼的豆画。免费、好用、人人都能上手。</div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="col-head">产品</div>
+          <a class="col-link" data-go="scroll:#features">功能特性</a>
+          <a class="col-link" href="palette.html">色板</a>
+          <a class="col-link" href="templates.html">模板库</a>
+          <a class="col-link" href="gallery.html">展示库</a>
+          <a class="col-link" href="pricing.html">价格</a>
+        </div>
+        <div class="footer-col">
+          <div class="col-head">资源</div>
+          <a class="col-link" href="decompose.html">成品识别</a>
+          <a class="col-link" href="tutorial.html">使用教程</a>
+          <a class="col-link" href="gallery.html">作品社区</a>
+          <a class="col-link" href="me.html">我的作品</a>
+          <a class="col-link" href="faq.html">常见问题</a>
+          <a class="col-link" href="blog.html">博客</a>
+        </div>
+        <div class="footer-col">
+          <div class="col-head">关于</div>
+          <a class="col-link" href="about.html">关于我们</a>
+          <a class="col-link" href="contact.html">联系我们</a>
+          <a class="col-link" href="privacy.html">隐私政策</a>
+          <a class="col-link" href="terms.html">用户协议</a>
+          <a class="col-link" href="admin.html">管理后台</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+      <div class="footer-social">
+        <a class="social" data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+        <a class="social" data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+        <a class="social" data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* 响应式等比缩放：保留 1440 原始画布，按窗口宽度缩放并居中 */
+(function(){
+  const page = document.getElementById('page');
+  function fit(){
+    const scale = Math.min(window.innerWidth / 1440, 1);
+    page.style.transform = 'scale(' + scale + ')';
+    page.style.left = ((window.innerWidth - 1440 * scale) / 2) + 'px';
+    document.body.style.height = (4052 * scale) + 'px';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+})();
+
+/* 生成 Hero 珠点阵列（心形） */
+(function(){
+  const grid = document.getElementById('beadGrid');
+  const N = 29;
+  for(let row=0; row<N; row++){
+    for(let col=0; col<N; col++){
+      const x = (col - (N-1)/2) / ((N-1)/2);
+      const y = ((N-1)/2 - row) / ((N-1)/2);
+      const inside = Math.pow(x*x + y*y - 1, 3) - x*x*y*y*y <= 0;
+      const dot = document.createElement('div');
+      dot.className = 'bead';
+      if(inside){
+        dot.style.background = Math.random() < 0.28 ? '#E5484D' : '#EC6A9C';
+      }else{
+        dot.style.visibility = 'hidden';
+      }
+      grid.appendChild(dot);
+    }
+  }
+})();
+
+/* 生成 12 色板 */
+(function(){
+  const rows = document.getElementById('paletteRows');
+  const colors = [
+    ['珊瑚粉','#EC6A9C'],['正红','#E5484D'],['深红','#C9434B'],
+    ['橘红','#F2643E'],['暖橙','#F4A259'],['亮黄','#F4C041'],
+    ['青绿','#1FA89A'],['天蓝','#5AA9E6'],['草绿','#6FCF97'],
+    ['奶白','#F6F1E7'],['浅棕','#C9A27E'],['墨黑','#241E18']
+  ];
+  for(let r=0; r<2; r++){
+    const rowEl = document.createElement('div');
+    rowEl.className = 'palette-row';
+    for(let c=0; c<6; c++){
+      const [name, hex] = colors[r*6 + c];
+      const sw = document.createElement('div');
+      sw.className = 'swatch';
+      sw.innerHTML =
+        '<div class="swatch-block" style="background:'+hex+'"></div>'+
+        '<div class="swatch-name">'+name+'</div>'+
+        '<div class="swatch-code">'+hex.toUpperCase()+'</div>';
+      rowEl.appendChild(sw);
+    }
+    rows.appendChild(rowEl);
+  }
+})();
+
+/* 按钮点击反馈：触发一次弹跳动画，明确"已点击" */
+(function(){
+  const btns = document.querySelectorAll('.header-cta, .btn-primary, .btn-secondary, .plan-btn, .cta-btn');
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){
+      b.classList.remove('pop');
+      void b.offsetWidth; /* 强制重排以重启动画 */
+      b.classList.add('pop');
+    });
+  });
+})();
+
+/* 交互总控：锚点滚动 / 注册跳转 / 提示 */
+(function(){
+  function scale(){ return Math.min(window.innerWidth / 1440, 1); }
+  function scrollToY(y){ window.scrollTo({ top: y * scale(), behavior: 'smooth' }); }
+  let toastTimer;
+  function showToast(msg){
+    let t = document.getElementById('toast');
+    if(!t){ t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.appendChild(t); }
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2400);
+  }
+  /* 导航锚点（href="#id"） */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      const id = a.getAttribute('href').slice(1);
+      if(!id) return;
+      const target = document.getElementById(id);
+      if(!target) return;
+      e.preventDefault();
+      scrollToY(target.offsetTop);
+    });
+  });
+  /* data-go 统一派发：scroll: / register / toast: */
+  document.querySelectorAll('[data-go]').forEach(function(el){
+    el.addEventListener('click', function(e){
+      const go = el.getAttribute('data-go');
+      const i = go.indexOf(':');
+      const type = i < 0 ? go : go.slice(0, i);
+      const val = i < 0 ? '' : go.slice(i + 1);
+      if(type === 'scroll'){ e.preventDefault(); const t = document.getElementById(val); if(t) scrollToY(t.offsetTop); }
+      else if(type === 'register'){ window.location.href = 'register.html'; }
+      else if(type === 'toast'){ e.preventDefault(); showToast(val); }
+    });
+  });
+  /* Logo 回顶部 */
+  const logo = document.querySelector('.logo');
+  if(logo){ logo.style.cursor = 'pointer'; logo.addEventListener('click', function(){ scrollToY(0); }); }
+})();
+
+/* 登录态：已登录时把「免费生成」替换为 头像(手机号后4位) + 退出，并在导航加「我的作品」 */
+(function(){
+  if(!localStorage.getItem('pb_token')) return;
+  const phone = localStorage.getItem('pb_phone') || '';
+  const last4 = phone.length >= 4 ? phone.slice(-4) : '****';
+  // 导航加「我的作品」
+  const nav = document.querySelector('.nav');
+  if(nav && !nav.querySelector('.nav-me')){
+    const a = document.createElement('a');
+    a.href = 'me.html'; a.className = 'nav-me'; a.textContent = '我的作品';
+    nav.appendChild(a);
+  }
+  document.querySelectorAll('.header-cta, .site-cta').forEach(function(btn){
+    btn.style.display = 'none';
+    const box = document.createElement('div');
+    box.className = 'user-box';
+    box.innerHTML = '<a class="nav-me-inline" href="me.html" style="margin-right:8px;font-weight:600;color:var(--orange);">我的作品</a><span class="user-avatar">' + last4 + '</span><button type="button" class="user-out">退出</button>';
+    if(btn.nextSibling) btn.parentNode.insertBefore(box, btn.nextSibling);
+    else btn.parentNode.appendChild(box);
+    box.querySelector('.user-out').addEventListener('click', function(){
+      localStorage.removeItem('pb_token');
+      localStorage.removeItem('pb_phone');
+      window.location.reload();
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>智能取色 · 像素豆 PixelBean</title>
+  <meta name="description" content="任意图片取色，自动匹配到 12 色官方拼豆色板，找到最接近的珠色。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="取色器 · 像素豆 PixelBean">
+  <meta property="og:description" content="任意图片取色，自动匹配到 12 色官方拼豆色板，找到最接近的珠色。">
+  <meta property="og:url" content="https://pixelbean.example.com/color.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="取色器 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="任意图片取色，自动匹配到 12 色官方拼豆色板，找到最接近的珠色。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/color.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html#features" class="active">功能</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">功能特性</div>
+    <div class="sec-title">智能取色</div>
+    <div class="sec-sub">上传一张照片，自动分析每个区域的颜色，匹配到最接近的 PixelBean 原厂色号，生成专属拼豆配色方案。下面这个工具可以直接玩。</div>
+  </div>
+
+  <section class="card color-tool">
+    <div class="ct-controls">
+      <div class="row">
+        <label>① 选择图片</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-primary" id="uploadBtn">上传图片</button>
+          <button class="btn btn-ghost" id="sampleBtn">用示例图</button>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" class="field-file">
+      </div>
+      <div class="row">
+        <label>② 提取主色数量</label>
+        <div class="seg" id="kSeg">
+          <button data-k="6">6 色</button>
+          <button data-k="8" class="on">8 色</button>
+          <button data-k="10">10 色</button>
+          <button data-k="12">12 色</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>③ 拼豆规格</label>
+        <div class="seg" id="sizeSeg">
+          <button data-size="29" class="on">29×29</button>
+          <button data-size="40">40×40</button>
+          <button data-size="57">57×57</button>
+        </div>
+      </div>
+      <div class="row">
+        <label>④ 导出</label>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-yellow" id="dlArtBtn">下载拼豆图纸</button>
+          <button class="btn btn-ghost" id="dlCardBtn">下载色卡</button>
+          <button class="btn btn-ghost" id="copyBtn">复制配色清单</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ct-preview">
+      <div class="preview-label">原图</div>
+      <img id="thumb" class="thumb" alt="原图预览">
+      <div class="preview-label">拼豆预览</div>
+      <canvas id="artCanvas" width="640" height="640"></canvas>
+      <div class="demo-hint">点阵颜色已自动匹配到 12 色官方色板，最接近原图。</div>
+    </div>
+  </section>
+
+  <section class="match-section">
+    <div class="result-head">智能取色 · 原图 → 拼豆 对照</div>
+    <div class="match-grid" id="matchGrid"></div>
+
+    <div class="result-head">拼豆配色方案（按所选规格统计用豆量）</div>
+    <div class="bars" id="scheme"></div>
+    <div class="demo-hint">点击任意色块可复制色号。完整图纸、色卡清单与 A4 打印版请点右上角「免费生成」注册后导出。</div>
+  </section>
+
+  <div class="page-foot-note">这只是「功能特性 · 智能取色」的实时演示。其余功能（多规格图纸、模板库、成品预览、一键打印）也可在「怎么用」与注册后体验。</div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="index.html#features">功能特性</a>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/bead.js"></script>
+<script src="assets/site.js"></script>
+<script src="assets/api.js"></script>
+<script>
+(function () {
+  "use strict";
+  var canvas = document.getElementById("artCanvas");
+  var size = 29;
+  var k = 8;
+  var currentImg = PixelBean.makeSample();
+  var lastCenters = [];
+
+  function toHex(rgb) {
+    return "#" + rgb.map(function (v) {
+      var s = Math.max(0, Math.min(255, Math.round(v))).toString(16);
+      return s.length < 2 ? "0" + s : s;
+    }).join("");
+  }
+
+  function nearestBead(rgb) {
+    var P = PixelBean.PALETTE, best = 0, bd = Infinity;
+    P.forEach(function (p, i) {
+      var h = p.hex.replace("#", "");
+      var r = parseInt(h.substr(0, 2), 16), g = parseInt(h.substr(2, 2), 16), b = parseInt(h.substr(4, 2), 16);
+      var dr = rgb[0] - r, dg = rgb[1] - g, db = rgb[2] - b;
+      var dd = dr * dr + dg * dg + db * db;
+      if (dd < bd) { bd = dd; best = i; }
+    });
+    return best;
+  }
+
+  /* k-means 提取主色 */
+  function extractColors(img, kk) {
+    var N = 80, c = document.createElement("canvas");
+    c.width = N; c.height = N;
+    var x = c.getContext("2d");
+    var sw = img.width || img.naturalWidth, sh = img.height || img.naturalHeight;
+    var side = Math.min(sw, sh), sx = (sw - side) / 2, sy = (sh - side) / 2;
+    x.drawImage(img, sx, sy, side, side, 0, 0, N, N);
+    var d = x.getImageData(0, 0, N, N).data;
+    var pts = [];
+    for (var i = 0; i < d.length; i += 4) {
+      if (d[i + 3] < 128) continue;
+      pts.push([d[i], d[i + 1], d[i + 2]]);
+    }
+    if (!pts.length) pts.push([240, 240, 240]);
+
+    var centers = [pts[Math.floor(Math.random() * pts.length)].slice()];
+    while (centers.length < kk) {
+      var bestd = -1, bestp = pts[0];
+      for (var t = 0; t < pts.length; t += Math.max(1, Math.floor(pts.length / 200))) {
+        var pd = Infinity;
+        for (var ci = 0; ci < centers.length; ci++) {
+          var dr = pts[t][0] - centers[ci][0], dg = pts[t][1] - centers[ci][1], db = pts[t][2] - centers[ci][2];
+          var dd = dr * dr + dg * dg + db * db;
+          if (dd < pd) pd = dd;
+        }
+        if (pd > bestd) { bestd = pd; bestp = pts[t]; }
+      }
+      centers.push(bestp.slice());
+    }
+    for (var it = 0; it < 12; it++) {
+      var sums = centers.map(function () { return [0, 0, 0, 0]; });
+      for (var p = 0; p < pts.length; p++) {
+        var bi = 0, bd2 = Infinity;
+        for (var cj = 0; cj < centers.length; cj++) {
+          var er = pts[p][0] - centers[cj][0], eg = pts[p][1] - centers[cj][1], eb = pts[p][2] - centers[cj][2];
+          var e = er * er + eg * eg + eb * eb;
+          if (e < bd2) { bd2 = e; bi = cj; }
+        }
+        sums[bi][0] += pts[p][0]; sums[bi][1] += pts[p][1]; sums[bi][2] += pts[p][2]; sums[bi][3]++;
+      }
+      for (var cj = 0; cj < centers.length; cj++) {
+        if (sums[cj][3] > 0) centers[cj] = [sums[cj][0] / sums[cj][3], sums[cj][1] / sums[cj][3], sums[cj][2] / sums[cj][3]];
+      }
+    }
+    var pop = centers.map(function () { return 0; });
+    for (var p = 0; p < pts.length; p++) {
+      var bi = 0, bd3 = Infinity;
+      for (var cj = 0; cj < centers.length; cj++) {
+        var er = pts[p][0] - centers[cj][0], eg = pts[p][1] - centers[cj][1], eb = pts[p][2] - centers[cj][2];
+        var e = er * er + eg * eg + eb * eb;
+        if (e < bd3) { bd3 = e; bi = cj; }
+      }
+      pop[bi]++;
+    }
+    return centers.map(function (cc, i) { return { rgb: cc, pop: pop[i] }; })
+                  .sort(function (a, b) { return b.pop - a.pop; });
+  }
+
+  function buildMatch(centers) {
+    var grid = document.getElementById("matchGrid");
+    grid.innerHTML = "";
+    centers.forEach(function (cc) {
+      var hex = toHex(cc.rgb);
+      var bp = PixelBean.PALETTE[nearestBead(cc.rgb)];
+      var pair = document.createElement("div");
+      pair.className = "match-pair";
+      pair.innerHTML =
+        '<div class="sw" data-hex="' + hex + '"><div class="sw-block" style="background:' + hex + '"></div><div class="sw-hex">' + hex + '</div></div>' +
+        '<div class="arrow">→</div>' +
+        '<div class="sw" data-hex="' + bp.hex + '"><div class="sw-block" style="background:' + bp.hex + '"></div><div class="sw-nm">' + bp.name + '</div><div class="sw-hex">' + bp.hex + '</div></div>';
+      grid.appendChild(pair);
+    });
+    grid.querySelectorAll(".sw").forEach(function (sw) {
+      sw.addEventListener("click", function () { window.copyText(sw.getAttribute("data-hex")); });
+    });
+  }
+
+  function buildScheme(counts) {
+    if (!counts) counts = PixelBean.estimateCounts(currentImg, size);
+    counts = counts.filter(function (c) { return c.count > 0; });
+    var max = counts.length ? counts[0].count : 1;
+    var box = document.getElementById("scheme");
+    box.innerHTML = "";
+    counts.forEach(function (c) {
+      var row = document.createElement("div");
+      row.className = "bar-row";
+      var pct = Math.round(c.count / max * 100);
+      row.innerHTML =
+        '<div class="nm">' + c.name + '</div>' +
+        '<div class="bar-track"><div class="bar-fill" style="width:' + pct + '%;background:' + c.hex + '"></div></div>' +
+        '<div class="ct">' + c.count + '</div>';
+      row.querySelector(".bar-fill").addEventListener("click", function () { window.copyText(c.hex); });
+      box.appendChild(row);
+    });
+  }
+
+  function render() {
+    // 视觉（canvas）始终走客户端引擎
+    PixelBean.renderBeadArt(canvas, currentImg, size);
+    // 数据：优先走数据后端 /api/process，失败回退客户端引擎
+    if (window.PixelBeanAPI) {
+      window.PixelBeanAPI.process(currentImg, { k: k, size: size })
+        .then(function (data) {
+          lastCenters = data.colors.map(function (c) { return { rgb: c.rgb, pop: c.pop }; });
+          buildMatch(lastCenters);
+          buildScheme(data.scheme);
+        })
+        .catch(function () {
+          lastCenters = extractColors(currentImg, k);
+          buildMatch(lastCenters);
+          buildScheme();
+        });
+    } else {
+      lastCenters = extractColors(currentImg, k);
+      buildMatch(lastCenters);
+      buildScheme();
+    }
+  }
+
+  function setThumb(src) { document.getElementById("thumb").src = src; }
+
+  document.getElementById("uploadBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+  });
+  document.getElementById("fileInput").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function (ev) {
+      var im = new Image();
+      im.onload = function () { currentImg = im; setThumb(ev.target.result); render(); };
+      im.src = ev.target.result;
+    };
+    r.readAsDataURL(f);
+  });
+  document.getElementById("sampleBtn").addEventListener("click", function () {
+    currentImg = PixelBean.makeSample();
+    setThumb(currentImg.toDataURL("image/png"));
+    render();
+  });
+  document.querySelectorAll("#kSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#kSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      k = parseInt(b.dataset.k, 10);
+      render();
+    });
+  });
+  document.querySelectorAll("#sizeSeg button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      document.querySelectorAll("#sizeSeg button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      size = parseInt(b.dataset.size, 10);
+      render();
+    });
+  });
+  document.getElementById("dlArtBtn").addEventListener("click", function () {
+    var a = document.createElement("a");
+    a.download = "pixelbean-拼豆图纸-" + size + "x" + size + ".png";
+    a.href = canvas.toDataURL("image/png");
+    a.click();
+  });
+  document.getElementById("dlCardBtn").addEventListener("click", function () {
+    var W = 520, H = 120 + lastCenters.length * 64;
+    var c = document.createElement("canvas"); c.width = W; c.height = H;
+    var x = c.getContext("2d");
+    x.fillStyle = "#F6F1E7"; x.fillRect(0, 0, W, H);
+    x.fillStyle = "#241E18"; x.font = "bold 26px 'Noto Sans SC', sans-serif";
+    x.fillText("像素豆 智能取色色卡", 24, 50);
+    x.fillStyle = "#6E655A"; x.font = "14px 'Noto Sans SC', sans-serif";
+    x.fillText("原图主色 → 匹配拼豆色", 24, 78);
+    lastCenters.forEach(function (cc, i) {
+      var y = 108 + i * 64;
+      var hex = toHex(cc.rgb), bp = PixelBean.PALETTE[nearestBead(cc.rgb)];
+      x.fillStyle = hex; x.fillRect(24, y, 40, 40);
+      x.fillStyle = "#241E18"; x.font = "14px 'Outfit', sans-serif"; x.fillText(hex, 76, y + 16);
+      x.fillStyle = "#6E655A"; x.font = "20px sans-serif"; x.fillText("→", 300, y + 28);
+      x.fillStyle = bp.hex; x.fillRect(330, y, 40, 40);
+      x.fillStyle = "#241E18"; x.font = "14px 'Noto Sans SC', sans-serif";
+      x.fillText(bp.name + "  " + bp.hex, 382, y + 16);
+    });
+    var a = document.createElement("a");
+    a.download = "pixelbean-色卡.png";
+    a.href = c.toDataURL("image/png");
+    a.click();
+  });
+  document.getElementById("copyBtn").addEventListener("click", function () {
+    var txt = lastCenters.map(function (cc) {
+      var bp = PixelBean.PALETTE[nearestBead(cc.rgb)];
+      return toHex(cc.rgb) + " → " + bp.name + " " + bp.hex;
+    }).join("\n");
+    window.copyText(txt);
+  });
+
+  setThumb(currentImg.toDataURL("image/png"));
+  render();
+})();
+</script>
+</body>
+</html>

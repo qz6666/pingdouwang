@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>管理后台 · 像素豆 PixelBean</title>
+  <meta name="description" content="站点管理后台。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="管理后台 · 像素豆 PixelBean">
+  <meta property="og:description" content="站点管理后台。">
+  <meta property="og:url" content="https://pixelbean.example.com/admin.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="管理后台 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="站点管理后台。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/admin.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.admin-main{max-width:1100px;margin:0 auto;padding:32px 24px 80px;}
+.admin-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.admin-top .title{font-size:24px;font-weight:800;display:flex;align-items:center;gap:10px;}
+.admin-top .title .dot{width:12px;height:12px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(0,160,120,.18);}
+.admin-top .sub{font-size:13px;color:var(--gray);}
+.btn{border:none;border-radius:12px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;}
+.btn-primary{background:var(--orange);color:#fff;}
+.btn-ghost{background:#fff;border:1px solid var(--border);color:var(--gray);}
+.btn-danger{background:#fff;border:1px solid #f3c2c2;color:#d33;}
+
+/* 登录门 */
+.login-card{max-width:420px;margin:80px auto;background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 12px 34px rgba(33,25,18,.07);padding:34px;}
+.login-card h2{font-size:20px;font-weight:800;margin-bottom:6px;}
+.login-card .hint{font-size:13px;color:var(--gray);margin-bottom:22px;line-height:1.6;}
+.login-card .field{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.login-card .field label{font-size:13px;font-weight:600;color:var(--gray);}
+.login-card .field input{border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:15px;outline:none;font-family:inherit;}
+.login-card .field input:focus{border-color:var(--orange);}
+.login-err{color:#d33;font-size:13px;min-height:18px;margin-bottom:8px;}
+
+/* 统计卡 */
+.stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-bottom:26px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 8px 22px rgba(33,25,18,.05);}
+.stat .v{font-size:26px;font-weight:800;color:var(--ink);}
+.stat .k{font-size:13px;color:var(--gray);margin-top:4px;}
+.stat .v.green{color:var(--green);}
+
+/* 标签页 */
+.tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.tab{padding:9px 18px;border-radius:999px;border:1px solid var(--border);background:#fff;font-size:14px;font-weight:600;color:var(--gray);cursor:pointer;}
+.tab.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.panel{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:0 8px 22px rgba(33,25,18,.05);overflow:hidden;}
+.panel-bar{display:flex;gap:12px;align-items:center;padding:16px;flex-wrap:wrap;border-bottom:1px solid var(--border);}
+.panel-bar input[type=search]{border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:14px;outline:none;min-width:220px;font-family:inherit;}
+.panel-bar input[type=search]:focus{border-color:var(--orange);}
+.panel-bar .spacer{flex:1;}
+.panel-bar .count{font-size:13px;color:var(--gray);}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid #f1ece6;}
+th{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;background:#faf7f2;}
+td{color:var(--ink);}
+tr:last-child td{border-bottom:none;}
+.thumb{width:44px;height:44px;border-radius:8px;border:1px solid var(--border);object-fit:cover;background:var(--cream);}
+.thumb-ph{width:44px;height:44px;border-radius:8px;background:var(--cream);display:flex;align-items:center;justify-content:center;color:var(--lightgray);font-size:11px;}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;}
+.pager{display:flex;align-items:center;gap:10px;padding:14px 16px;font-size:13px;color:var(--gray);}
+.pager button{padding:6px 12px;border-radius:9px;border:1px solid var(--border);background:#fff;cursor:pointer;font-family:inherit;font-size:13px;}
+.pager button:disabled{opacity:.4;cursor:not-allowed;}
+.empty{padding:40px;text-align:center;color:var(--lightgray);}
+@media (max-width:880px){
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+  .admin-main{padding:20px 14px 60px;}
+}
+</style>
+  <meta name="robots" content="noindex">
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <a class="site-cta" href="register.html">免费生成</a>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <!-- 登录门 -->
+  <section class="login-card" id="loginCard">
+    <h2>管理后台</h2>
+    <div class="hint">请输入管理令牌（<span class="mono">ADMIN_TOKEN</span>）登录。令牌由服务端环境变量设置，未设置时后台不可用。</div>
+    <div class="field">
+      <label for="token">管理令牌</label>
+      <input type="password" id="token" placeholder="粘贴 ADMIN_TOKEN" autocomplete="off">
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <button class="btn btn-primary" id="loginBtn" style="width:100%">登录</button>
+  </section>
+
+  <!-- 控制台 -->
+  <section id="console" style="display:none;">
+    <div class="admin-top">
+      <div>
+        <div class="title"><span class="dot"></span>运营控制台</div>
+        <div class="sub" id="whoami">已登录</div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-ghost" id="refreshBtn">刷新</button>
+        <button class="btn btn-danger" id="logoutBtn">退出登录</button>
+      </div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="v" id="stUsers">–</div><div class="k">注册用户</div></div>
+      <div class="stat"><div class="v" id="stKb">–</div><div class="k">作品总数</div></div>
+      <div class="stat"><div class="v green" id="stToday">–</div><div class="k">今日新增</div></div>
+      <div class="stat"><div class="v" id="stCodes">–</div><div class="k">待验证短信</div></div>
+      <div class="stat"><div class="v" id="stSize" style="font-size:20px;">–</div><div class="k">数据库大小</div></div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="users">用户</button>
+      <button class="tab" data-tab="kb">作品</button>
+      <button class="tab" data-tab="codes">验证码</button>
+    </div>
+
+    <!-- 用户 -->
+    <div class="panel" data-panel="users">
+      <div class="panel-bar">
+        <input type="search" id="qUsers" placeholder="搜索手机号…">
+        <button class="btn btn-ghost" data-search="users">搜索</button>
+        <span class="spacer"></span>
+        <span class="count" id="cntUsers"></span>
+      </div>
+      <table>
+        <thead><tr><th>手机号</th><th>注册时间</th><th style="width:90px;">操作</th></tr></thead>
+        <tbody id="tbUsers"></tbody>
+      </table>
+      <div class="pager" id="pgUsers"></div>
+    </div>
+
+    <!-- 作品 -->
+    <div class="panel" data-panel="kb" style="display:none;">
+      <div class="panel-bar">
+        <input type="search" id="qKb" placeholder="搜索名称 / 分类…">
+        <button class="btn btn-ghost" data-search="kb">搜索</button>
+        <span class="spacer"></span>
+        <span class="count" id="cntKb"></span>
+      </div>
+      <table>
+        <thead><tr><th style="width:60px;">缩略图</th><th>名称</th><th>分类</th><th>尺寸</th><th>颜色数</th><th>生成时间</th><th style="width:90px;">操作</th></tr></thead>
+        <tbody id="tbKb"></tbody>
+      </table>
+      <div class="pager" id="pgKb"></div>
+    </div>
+
+    <!-- 验证码 -->
+    <div class="panel" data-panel="codes" style="display:none;">
+      <div class="panel-bar">
+        <span class="spacer"></span>
+        <span class="count" id="cntCodes"></span>
+      </div>
+      <table>
+        <thead><tr><th>手机号</th><th>验证码</th><th>剩余有效</th><th style="width:90px;">操作</th></tr></thead>
+        <tbody id="tbCodes"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ============ 管理后台前端逻辑 ============ */
+var TOKEN_KEY = "pb_admin_token";
+var token = sessionStorage.getItem(TOKEN_KEY) || "";
+var state = { users: { page: 1, q: "" }, kb: { page: 1, q: "" } };
+
+function api(path, opts) {
+  opts = opts || {};
+  var headers = Object.assign({ "x-admin-token": token }, opts.headers || {});
+  if (opts.body) headers["Content-Type"] = "application/json";
+  return fetch(path, { method: opts.method || "GET", headers: headers, body: opts.body })
+    .then(function (r) {
+      return r.json().then(function (d) { return { ok: r.ok, status: r.status, data: d }; });
+    });
+}
+function fmtTs(ts) {
+  if (!ts) return "–";
+  var d = new Date(ts);
+  var p = function (n) { return (n < 10 ? "0" : "") + n; };
+  return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + " " + p(d.getHours()) + ":" + p(d.getMinutes());
+}
+function esc(s) {
+  return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+    return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+  });
+}
+
+/* ---- 登录 ---- */
+function doLogin() {
+  var t = document.getElementById("token").value.trim();
+  if (!t) { document.getElementById("loginErr").textContent = "请输入令牌"; return; }
+  api("/api/admin/stats").then(function (r) {
+    if (!r.ok) { document.getElementById("loginErr").textContent = (r.data && r.data.error) || "登录失败"; return; }
+    token = t; sessionStorage.setItem(TOKEN_KEY, token);
+    enter();
+  });
+}
+document.getElementById("loginBtn").addEventListener("click", doLogin);
+document.getElementById("token").addEventListener("keydown", function (e) { if (e.key === "Enter") doLogin(); });
+document.getElementById("logoutBtn").addEventListener("click", function () {
+  token = ""; sessionStorage.removeItem(TOKEN_KEY);
+  document.getElementById("console").style.display = "none";
+  document.getElementById("loginCard").style.display = "block";
+});
+
+function enter() {
+  document.getElementById("loginCard").style.display = "none";
+  document.getElementById("console").style.display = "block";
+  loadStats(); loadUsers(); loadKB(); loadCodes();
+}
+
+function loadStats() {
+  api("/api/admin/stats").then(function (r) {
+    if (!r.ok) return;
+    var d = r.data;
+    document.getElementById("stUsers").textContent = d.users;
+    document.getElementById("stKb").textContent = d.kb;
+    document.getElementById("stToday").textContent = d.newToday;
+    document.getElementById("stCodes").textContent = d.codes;
+    document.getElementById("stSize").textContent = d.dbSizeText;
+  });
+}
+
+function loadUsers() {
+  var s = state.users;
+  api("/api/admin/users?page=" + s.page + "&size=20&q=" + encodeURIComponent(s.q)).then(function (r) {
+    if (!r.ok) return;
+    var d = r.data;
+    var tb = document.getElementById("tbUsers");
+    if (!d.items.length) { tb.innerHTML = '<tr><td colspan="3" class="empty">暂无用户</td></tr>'; }
+    else {
+      tb.innerHTML = d.items.map(function (u) {
+        return "<tr><td class='mono'>" + esc(u.phone) + "</td><td>" + fmtTs(u.created_at) +
+          "</td><td><button class='btn btn-danger' data-del-user='" + u.id + "'>删除</button></td></tr>";
+      }).join("");
+    }
+    document.getElementById("cntUsers").textContent = "共 " + d.total + " 条 · 第 " + d.page + "/" + d.pages + " 页";
+    renderPager("pgUsers", d, function (p) { state.users.page = p; loadUsers(); });
+    bindUserDel();
+  });
+}
+function bindUserDel() {
+  document.querySelectorAll("[data-del-user]").forEach(function (b) {
+    b.onclick = function () {
+      if (!confirm("确认删除该用户？该操作不可恢复。")) return;
+      api("/api/admin/user/" + b.getAttribute("data-del-user"), { method: "DELETE" }).then(function (r) {
+        if (r.ok) { loadUsers(); loadStats(); } else alert((r.data && r.data.error) || "删除失败");
+      });
+    };
+  });
+}
+
+function loadKB() {
+  var s = state.kb;
+  api("/api/admin/kb?page=" + s.page + "&size=20&q=" + encodeURIComponent(s.q)).then(function (r) {
+    if (!r.ok) return;
+    var d = r.data;
+    var tb = document.getElementById("tbKb");
+    if (!d.items.length) { tb.innerHTML = '<tr><td colspan="7" class="empty">暂无作品</td></tr>'; }
+    else {
+      tb.innerHTML = d.items.map(function (k) {
+        var thumb = k.thumb && k.thumb.indexOf("data:image") === 0
+          ? "<img class='thumb' src='" + esc(k.thumb) + "' alt=''>"
+          : "<div class='thumb-ph'>无图</div>";
+        return "<tr>" + thumb +
+          "<td>" + esc(k.source) + "</td>" +
+          "<td>" + esc(k.subject) + "</td>" +
+          "<td>" + (k.size || "") + "</td>" +
+          "<td>" + (k.colorsCount || 0) + "</td>" +
+          "<td>" + fmtTs(k.ts) + "</td>" +
+          "<td><button class='btn btn-danger' data-del-kb='" + esc(k.id) + "'>删除</button></td></tr>";
+      }).join("");
+    }
+    document.getElementById("cntKb").textContent = "共 " + d.total + " 条 · 第 " + d.page + "/" + d.pages + " 页";
+    renderPager("pgKb", d, function (p) { state.kb.page = p; loadKB(); });
+    bindKbDel();
+  });
+}
+function bindKbDel() {
+  document.querySelectorAll("[data-del-kb]").forEach(function (b) {
+    b.onclick = function () {
+      if (!confirm("确认删除该作品？")) return;
+      api("/api/admin/kb/" + encodeURIComponent(b.getAttribute("data-del-kb")), { method: "DELETE" }).then(function (r) {
+        if (r.ok) { loadKB(); loadStats(); } else alert((r.data && r.data.error) || "删除失败");
+      });
+    };
+  });
+}
+
+function loadCodes() {
+  api("/api/admin/codes").then(function (r) {
+    if (!r.ok) return;
+    var d = r.data;
+    var tb = document.getElementById("tbCodes");
+    if (!d.items.length) { tb.innerHTML = '<tr><td colspan="4" class="empty">当前无有效验证码</td></tr>'; }
+    else {
+      tb.innerHTML = d.items.map(function (c) {
+        var sec = Math.ceil(c.remaining / 1000);
+        var left = sec > 0 ? sec + " 秒" : "已过期";
+        return "<tr><td class='mono'>" + esc(c.phone) + "</td><td class='mono'>" + esc(c.code) +
+          "</td><td>" + left + "</td><td><button class='btn btn-danger' data-del-code='" + encodeURIComponent(c.phone) + "'>清除</button></td></tr>";
+      }).join("");
+    }
+    document.getElementById("cntCodes").textContent = "共 " + d.total + " 条有效验证码";
+    bindCodeDel();
+  });
+}
+function bindCodeDel() {
+  document.querySelectorAll("[data-del-code]").forEach(function (b) {
+    b.onclick = function () {
+      if (!confirm("确认清除该验证码？")) return;
+      api("/api/admin/codes/" + b.getAttribute("data-del-code"), { method: "DELETE" }).then(function (r) {
+        if (r.ok) { loadCodes(); loadStats(); } else alert((r.data && r.data.error) || "清除失败");
+      });
+    };
+  });
+}
+
+function renderPager(id, d, go) {
+  var el = document.getElementById(id);
+  el.innerHTML = "";
+  var prev = document.createElement("button");
+  prev.textContent = "上一页"; prev.disabled = d.page <= 1;
+  prev.onclick = function () { go(d.page - 1); };
+  var nxt = document.createElement("button");
+  nxt.textContent = "下一页"; nxt.disabled = d.page >= d.pages;
+  nxt.onclick = function () { go(d.page + 1); };
+  var info = document.createElement("span");
+  info.style.flex = "1";
+  info.textContent = "";
+  el.appendChild(prev); el.appendChild(info); el.appendChild(nxt);
+}
+
+/* ---- 标签切换 ---- */
+document.querySelectorAll(".tab").forEach(function (t) {
+  t.onclick = function () {
+    document.querySelectorAll(".tab").forEach(function (x) { x.classList.remove("active"); });
+    t.classList.add("active");
+    var name = t.getAttribute("data-tab");
+    document.querySelectorAll(".panel").forEach(function (p) {
+      p.style.display = p.getAttribute("data-panel") === name ? "block" : "none";
+    });
+    if (name === "codes") loadCodes();
+  };
+});
+
+/* ---- 搜索 ---- */
+document.querySelectorAll("[data-search]").forEach(function (b) {
+  b.onclick = function () {
+    var which = b.getAttribute("data-search");
+    if (which === "users") { state.users.q = document.getElementById("qUsers").value.trim(); state.users.page = 1; loadUsers(); }
+    else { state.kb.q = document.getElementById("qKb").value.trim(); state.kb.page = 1; loadKB(); }
+  };
+});
+["qUsers", "qKb"].forEach(function (id) {
+  document.getElementById(id).addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      var which = id === "qUsers" ? "users" : "kb";
+      document.querySelector("[data-search='" + which + "']").click();
+    }
+  });
+});
+
+document.getElementById("refreshBtn").addEventListener("click", function () {
+  loadStats(); loadUsers(); loadKB(); loadCodes();
+});
+
+/* ---- 启动：若已有 token 则直接进 ---- */
+if (token) { api("/api/admin/stats").then(function (r) { if (r.ok) enter(); }); }
+</script>
+</body>
+</html>

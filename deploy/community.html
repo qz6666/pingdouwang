@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>作品社区 · 像素豆 PixelBean</title>
+  <meta name="description" content="拼豆爱好者作品分享社区，浏览分类作品、发布你的创作。">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="像素豆 PixelBean">
+  <meta property="og:title" content="作品社区 · 像素豆 PixelBean">
+  <meta property="og:description" content="拼豆爱好者作品分享社区，浏览分类作品、发布你的创作。">
+  <meta property="og:url" content="https://pixelbean.example.com/community.html">
+  <meta property="og:image" content="https://pixelbean.example.com/og-cover.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="作品社区 · 像素豆 PixelBean">
+  <meta name="twitter:description" content="拼豆爱好者作品分享社区，浏览分类作品、发布你的创作。">
+  <meta name="twitter:image" content="https://pixelbean.example.com/og-cover.png">
+  <link rel="canonical" href="https://pixelbean.example.com/community.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700;900&family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+.com-wrap{max-width:1080px;margin:0 auto;padding:24px 24px 72px;}
+.com-hero{background:linear-gradient(120deg,#241E18,#3a3026);border-radius:22px;padding:48px;color:#fff;text-align:center;display:flex;flex-direction:column;align-items:center;gap:18px;margin-bottom:36px;}
+.com-hero h2{font-size:30px;font-weight:700;}
+.com-hero p{font-size:16px;opacity:.9;max-width:560px;}
+.com-hero .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
+.com-hero .btn-ghost{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.5);}
+.com-hero .btn-ghost:hover{border-color:#fff;background:rgba(255,255,255,.26);}
+.chips{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.chip{background:#fff;border:1px solid var(--border);border-radius:999px;padding:10px 20px;font-size:15px;font-weight:600;color:var(--gray);cursor:pointer;transition:all .15s;}
+.chip:hover,.chip.on{background:var(--orange);color:#fff;border-color:var(--orange);}
+.com-note{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 30px rgba(33,25,18,.06);margin-top:36px;}
+.com-note h3{font-size:18px;font-weight:700;}
+.com-note p{font-size:15px;color:var(--gray);}
+.com-note .row{display:flex;gap:12px;flex-wrap:wrap;}
+@media (max-width:680px){.com-hero,.com-note{padding:32px;}}
+</style>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="bar">
+    <a class="site-logo" href="index.html">
+      <img src="assets/svg/3_5.svg" alt="像素豆">
+      <div><div class="cn">像素豆</div><div class="en">PixelBean</div></div>
+    </a>
+    <nav class="site-nav">
+      <a href="index.html">首页</a>
+      <a href="templates.html">模板库</a>
+      <a href="how.html">怎么用</a>
+      <a href="palette.html">色板</a>
+      <a href="pricing.html">价格</a>
+    </nav>
+    <button class="site-cta" data-go="register">免费生成</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="page-head">
+    <div class="eyebrow">Community</div>
+    <div class="sec-title">作品社区</div>
+    <div class="sec-sub">看看大家用像素豆拼出了什么，也给自己的下一幅作品找点灵感。</div>
+  </div>
+
+  <div class="com-wrap">
+    <div class="com-hero">
+      <h2>发现好玩的豆画</h2>
+      <p>从萌萌的动物到甜甜的食物，社区里收录了大家生成的拼豆图纸。点进去就能看大图、配色和浏览量。</p>
+      <div class="row">
+        <a class="btn btn-primary" href="gallery.html">进入展示库 →</a>
+        <a class="btn btn-ghost" href="templates.html">挑个模板开始</a>
+      </div>
+    </div>
+
+    <div class="chips">
+      <a class="chip" href="gallery.html?cat=动物">🐾 动物</a>
+      <a class="chip" href="gallery.html?cat=人物">🧑 人物</a>
+      <a class="chip" href="gallery.html?cat=食物">🍰 食物</a>
+      <a class="chip" href="gallery.html?cat=自然">🌿 自然</a>
+      <a class="chip" href="gallery.html?cat=配饰">💎 配饰</a>
+      <a class="chip" href="gallery.html?cat=卡通">😊 卡通</a>
+    </div>
+
+    <div class="com-note">
+      <h3>想展示自己的作品？</h3>
+      <p>登录后生成图纸会自动保存到「我的作品」，未来我们会上线投稿与社区展示功能，让你的作品也能出现在这里。现在先去生成器里拼一幅吧！</p>
+      <div class="row">
+        <a class="btn btn-primary" href="decompose.html">去生成</a>
+        <a class="btn btn-ghost" href="me.html">我的作品</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="grid">
+    <div class="fbrand">
+      <div class="logo"><img src="assets/svg/6_214.svg" alt="像素豆"><span>像素豆 PixelBean</span></div>
+      <p>把任何画面变成可拼的豆画。免费、好用、人人都能上手。</p>
+    </div>
+    <div class="fcols">
+      <div class="fcol">
+        <div class="h">产品</div>
+        <a href="how.html">怎么用</a>
+        <a href="palette.html">色板</a>
+        <a href="templates.html">模板库</a>
+        <a href="pricing.html">价格</a>
+      </div>
+      <div class="fcol">
+        <div class="h">资源</div>
+        <a href="tutorial.html">使用教程</a>
+        <a href="community.html">作品社区</a>
+        <a href="faq.html">常见问题</a>
+      </div>
+      <div class="fcol">
+        <div class="h">关于</div>
+        <a href="about.html">关于我们</a>
+        <a href="contact.html">联系我们</a>
+      </div>
+      <div class="fcol">
+        <div class="h">法律</div>
+        <a href="privacy.html">隐私政策</a>
+        <a href="terms.html">用户协议</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbottom">
+    <div>© 2026 像素豆 PixelBean · 用豆子拼出你的热爱</div>
+    <div style="display:flex;gap:16px;">
+      <a data-go="toast:演示版 · 微信关注入口即将上线">微信</a>
+      <a data-go="toast:演示版 · 小红书关注入口即将上线">小红书</a>
+      <a data-go="toast:演示版 · 微博关注入口即将上线">微博</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/site.js"></script>
+</body>
+</html>

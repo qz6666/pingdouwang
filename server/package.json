@@ -1,0 +1,24 @@
+{
+  "name": "pixelbean-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "像素豆 PixelBean 后端（数据接口 + 登录注册，单端口合并部署，SQLite 持久化）",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "start:api": "node api.js",
+    "start:auth": "node auth.js",
+    "monitor": "node monitor.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.11.1",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
